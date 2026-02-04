@@ -42,6 +42,9 @@ public class Cliente {
     @Column(name = "ativo", nullable = false)
     private Boolean ativo;
 
+    @Column(name = "tipo_conta", nullable = false)
+    private TipoConta tipoConta;
+
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Conta> contas;
 
