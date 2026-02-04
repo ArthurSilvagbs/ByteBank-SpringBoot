@@ -1,4 +1,6 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.repository;
 
-public interface ContaRpository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ContaRpository extends JpaRepository {
 }

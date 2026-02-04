@@ -1,4 +1,6 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.repository;
 
-public interface ClienteRespository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ClienteRespository extends JpaRepository {
 }
