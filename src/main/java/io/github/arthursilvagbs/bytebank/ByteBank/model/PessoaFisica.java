@@ -1,4 +1,4 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.model;
 
-public class ContaPessoaJuridica {
+public class PessoaFisica extends Cliente {
 }
