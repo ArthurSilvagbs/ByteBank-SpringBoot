@@ -15,8 +15,4 @@ public class PessoaFisica extends Cliente {
     @Column(name = "cpf", nullable = false, unique = true, length = 11)
     private String cpf;
 
-    public PessoaFisica() {
-        super();
-        super.setTipoConta(TipoConta.PESSOA_FISICA);
-    }
 }
