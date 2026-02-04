@@ -10,9 +10,13 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "id")
 @Getter
 @Setter
-@ToString
 public class PessoaJuridica extends Cliente {
 
     @Column(name = "cnpj", nullable = false, unique = true, length = 14)
     private String cnpj;
+
+    public PessoaJuridica() {
+        super();
+        super.setTipoConta(TipoConta.PESSOA_JURIDICCA);
+    }
 }
