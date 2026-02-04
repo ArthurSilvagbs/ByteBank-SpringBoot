@@ -6,6 +6,6 @@ import io.github.arthursilvagbs.bytebank.ByteBank.model.TipoCliente;
 public record PessoaFisicaDTO(String nome, String email, String telefone, String endereco, TipoCliente tipoCliente, String cpf) {
 
     public PessoaFisica mapearParaPessoaFisica() {
-        PessoaFisica contaPF = new PessoaFisica()
+        return new PessoaFisica(this.nome, this.email, this.telefone, this.endereco, this.tipoCliente, this.cpf);
     }
 }
