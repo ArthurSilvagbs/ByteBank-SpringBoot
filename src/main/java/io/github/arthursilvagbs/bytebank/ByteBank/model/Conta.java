@@ -36,7 +36,7 @@ public class Conta {
     private LocalDate dataCadastro;
 
     @Min(0)
-    @Column(name = "saldo", scale = 11, precision = 2)
+    @Column(name = "saldo", scale = 2, precision = 11)
     private BigDecimal saldo;
 
     @ManyToOne
