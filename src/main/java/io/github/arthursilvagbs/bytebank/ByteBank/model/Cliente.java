@@ -3,6 +3,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Table(name = "cliente")
 @Getter
 @Setter
+@ToString
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Cliente {
