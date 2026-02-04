@@ -44,4 +44,19 @@ public class Movimentacao {
     @ManyToOne
     @JoinColumn(name = "conta_destino_id")
     private Conta contaDestino;
+
+    protected Movimentacao() {}
+
+    public Movimentacao(BigDecimal valor, TipoMovimentacao tipoMovimentacao, Conta contaOrigem) {
+        this.valor = valor;
+        this.tipoMovimentacao = tipoMovimentacao;
+        this.contaOrigem = contaOrigem;
+    }
+
+    public Movimentacao(BigDecimal valor, TipoMovimentacao tipoMovimentacao, Conta contaOrigem, Conta contaDestino) {
+        this.valor = valor;
+        this.tipoMovimentacao = tipoMovimentacao;
+        this.contaOrigem = contaOrigem;
+        this.contaDestino = contaDestino;
+    }
 }

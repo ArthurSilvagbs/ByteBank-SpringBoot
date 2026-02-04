@@ -43,7 +43,7 @@ public class Cliente {
     private LocalDate dataCadastro;
 
     @Column(name = "ativo", nullable = false)
-    private Boolean ativo;
+    private Boolean ativo = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_conta", nullable = false)
@@ -52,4 +52,13 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Conta> contas;
 
+    public Cliente(String nome, String email, String telefone, String endereco, TipoCliente tipoCliente) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+        this.endereco = endereco;
+    }
+
+    public Cliente() {
+    }
 }
