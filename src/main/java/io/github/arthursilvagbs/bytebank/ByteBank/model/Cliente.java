@@ -12,8 +12,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "cliente")
-@Getter @Setter
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Cliente {
 
     @Id
@@ -24,9 +26,21 @@ public class Cliente {
     @Column(name = "nome", nullable = false, length = 250)
     private String nome;
 
+    @Column(name = "email", unique = true)
+    private String email;
+
+    @Column(name = "telefone", unique = true, nullable = false)
+    private String telefone;
+
+    @Column(name = "endereco", nullable = false)
+    private String endereco;
+
     @CreatedDate
     @Column(name = "data_cadastro")
     private LocalDate dataCadastro;
+
+    @Column(name = "ativo", nullable = false)
+    private Boolean ativo;
 
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private List<Conta> contas;
