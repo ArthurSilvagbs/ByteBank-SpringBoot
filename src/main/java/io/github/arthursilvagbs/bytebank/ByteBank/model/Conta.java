@@ -59,7 +59,7 @@ public class Conta {
         this.numeroConta = new Random().nextInt(90000) + 10000;
     }
 
-    protected Conta() {}
+    public Conta() {}
 
     public Conta(Cliente cliente) {
         this.cliente = cliente;

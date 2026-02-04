@@ -14,7 +14,7 @@ public class PessoaJuridica extends Cliente {
     @Column(name = "cnpj", nullable = false, unique = true, length = 14)
     private String cnpj;
 
-    protected PessoaJuridica() {}
+    public PessoaJuridica() {}
 
     public PessoaJuridica(String nome, String email, String telefone, String endereco, TipoCliente tipoCliente, String cnpj) {
         super(nome, email, telefone, endereco, TipoCliente.PESSOA_FISICA);

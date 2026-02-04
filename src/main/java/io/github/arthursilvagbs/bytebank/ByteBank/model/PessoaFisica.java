@@ -14,7 +14,7 @@ public class PessoaFisica extends Cliente {
     @Column(name = "cpf", nullable = false, unique = true, length = 11)
     private String cpf;
 
-    protected PessoaFisica(){}
+    public PessoaFisica(){}
 
     public PessoaFisica(String nome, String email, String telefone, String endereco, TipoCliente tipoCliente, String cpf) {
         super(nome, email, telefone, endereco, TipoCliente.PESSOA_FISICA);

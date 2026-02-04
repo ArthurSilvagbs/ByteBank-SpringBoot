@@ -45,7 +45,7 @@ public class Movimentacao {
     @JoinColumn(name = "conta_destino_id")
     private Conta contaDestino;
 
-    protected Movimentacao() {}
+    public Movimentacao() {}
 
     public Movimentacao(BigDecimal valor, TipoMovimentacao tipoMovimentacao, Conta contaOrigem) {
         this.valor = valor;
