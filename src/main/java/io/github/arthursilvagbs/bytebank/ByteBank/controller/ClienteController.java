@@ -97,4 +97,25 @@ public class ClienteController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody ClienteUpdateDTO dto) {
+        UUID idCliente = UUID.fromString(id);
+        Optional<Cliente> clienteEncontrado = service.obterPorId(idCliente);
+
+        if (clienteEncontrado.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var clienteEntidade = clienteEncontrado.get();
+        clienteEntidade.setNome(dto.nome());
+        clienteEntidade.setEmail(dto.email());
+        clienteEntidade.setTelefone(dto.telefone());
+        clienteEntidade.setEndereco(dto.endereco());
+
+        service.salvar(clienteEntidade);
+
+        return ResponseEntity.ok(clienteEntidade);
+    }
+
+
 }
