@@ -114,8 +114,21 @@ public class ClienteController {
 
         service.salvar(clienteEntidade);
 
-        return ResponseEntity.ok(clienteEntidade);
+        return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deletar(@PathVariable("id") String id){
+        UUID idCliente = UUID.fromString(id);
+        Optional<Cliente> clienteEncontrado = service.obterPorId(idCliente);
+
+        if (clienteEncontrado.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        service.deletar(clienteEncontrado.get());
+
+        return ResponseEntity.noContent().build();
+    }
 
 }
