@@ -29,6 +29,7 @@ public class Conta {
     private UUID id;
 
     @Column(nullable = false, unique = true)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer numeroConta;
 
     @CreatedDate

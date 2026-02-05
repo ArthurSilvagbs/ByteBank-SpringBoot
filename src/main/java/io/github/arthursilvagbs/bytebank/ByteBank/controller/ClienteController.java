@@ -112,7 +112,7 @@ public class ClienteController {
         clienteEntidade.setTelefone(dto.telefone());
         clienteEntidade.setEndereco(dto.endereco());
 
-        service.salvar(clienteEntidade);
+        service.atualizar(clienteEntidade);
 
         return ResponseEntity.ok().build();
     }
