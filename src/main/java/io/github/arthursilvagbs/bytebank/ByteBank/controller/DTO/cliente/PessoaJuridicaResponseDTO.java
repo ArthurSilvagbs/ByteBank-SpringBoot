@@ -1,4 +1,8 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente;
 
-public record PessoaJuridicaResponseDTO() {
+import io.github.arthursilvagbs.bytebank.ByteBank.model.TipoCliente;
+
+import java.util.UUID;
+
+public record PessoaJuridicaResponseDTO(UUID id, String nome, String email, String telefone, String endereco, TipoCliente tipoCliente, String cnpj) {
 }

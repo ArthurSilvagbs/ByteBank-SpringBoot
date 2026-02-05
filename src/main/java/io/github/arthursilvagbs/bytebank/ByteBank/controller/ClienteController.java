@@ -1,7 +1,6 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente.PessoaFisicaDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente.PessoaJuridicaDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente.*;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
@@ -23,9 +22,9 @@ public class ClienteController {
     private final ClienteService service;
 
     @PostMapping
-    public ResponseEntity<Object> salvarPessoaFisica(@RequestBody PessoaFisicaDTO pessoaFisicaDTO) {
+    public ResponseEntity<Object> salvarPessoaFisica(@RequestBody PessoaFisicaCreateDTO pessoaFisicaCreateDTO) {
 
-        PessoaFisica novoCliente = pessoaFisicaDTO.mapearParaPessoaFisica();
+        PessoaFisica novoCliente = pessoaFisicaCreateDTO.mapearParaPessoaFisica();
 
         service.salvar(novoCliente);
 
@@ -39,9 +38,9 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> salvarPessoaJuridica(@RequestBody PessoaJuridicaDTO pessoaJuridicaDTO) {
+    public ResponseEntity<Object> salvarPessoaJuridica(@RequestBody PessoaJuridicaCreateDTO pessoaJuridicaCreateDTO) {
 
-        PessoaJuridica novoCliente = pessoaJuridicaDTO.mapearParaPessoaJuridica();
+        PessoaJuridica novoCliente = pessoaJuridicaCreateDTO.mapearParaPessoaJuridica();
 
         service.salvar(novoCliente);
 
@@ -66,7 +65,8 @@ public class ClienteController {
             Cliente clienteEntidade = clienteEncontrado.get();
 
             if (clienteEntidade instanceof PessoaFisica pf) {
-                PessoaFisicaDTO pessoaFisicaDTO = new PessoaFisicaDTO(
+                PessoaFisicaResponseDTO pessoaFisicaResponseDTO = new PessoaFisicaResponseDTO(
+                        pf.getId(),
                         pf.getNome(),
                         pf.getEmail(),
                         pf.getTelefone(),
@@ -75,11 +75,12 @@ public class ClienteController {
                         pf.getCpf()
                 );
 
-                return ResponseEntity.ok(pessoaFisicaDTO);
+                return ResponseEntity.ok(pessoaFisicaResponseDTO);
             }
 
             if (clienteEntidade instanceof PessoaJuridica pj) {
-                PessoaJuridicaDTO pessoaJuridicaDTO = new PessoaJuridicaDTO(
+                PessoaJuridicaResponseDTO pessoaJuridicaResponseDTO = new PessoaJuridicaResponseDTO(
+                        pj.getId(),
                         pj.getNome(),
                         pj.getEmail(),
                         pj.getTelefone(),
@@ -88,11 +89,12 @@ public class ClienteController {
                         pj.getCnpj()
                 );
 
-                return ResponseEntity.ok(pessoaJuridicaDTO);
+                return ResponseEntity.ok(pessoaJuridicaResponseDTO);
             }
 
         }
 
         return ResponseEntity.notFound().build();
     }
+
 }

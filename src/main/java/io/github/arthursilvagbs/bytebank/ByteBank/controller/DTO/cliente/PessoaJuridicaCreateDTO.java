@@ -1,11 +1,11 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
+import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.TipoCliente;
 
-public record PessoaJuridicaCreateDTO(String nome, String email, String telefone, String endereco, TipoCliente tipoCliente, String cpf) {
+public record PessoaJuridicaCreateDTO(String nome, String email, String telefone, String endereco, TipoCliente tipoCliente, String cnpj) {
 
-    public PessoaFisica mapearParaPessoaFisica() {
-        return new PessoaFisica(this.nome, this.email, this.telefone, this.endereco, this.tipoCliente, this.cpf);
+    public PessoaJuridica mapearParaPessoaJuridica() {
+        return new PessoaJuridica(this.nome, this.email, this.telefone, this.endereco, this.tipoCliente, this.cnpj);
     }
 }
