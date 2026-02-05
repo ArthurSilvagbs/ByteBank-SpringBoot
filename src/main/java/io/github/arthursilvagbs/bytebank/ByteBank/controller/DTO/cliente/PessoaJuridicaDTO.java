@@ -1,6 +1,5 @@
-package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO;
+package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.TipoCliente;
 

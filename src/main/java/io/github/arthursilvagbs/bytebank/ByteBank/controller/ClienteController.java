@@ -1,7 +1,7 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.PessoaFisicaDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.PessoaJuridicaDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente.PessoaFisicaDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente.PessoaJuridicaDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
