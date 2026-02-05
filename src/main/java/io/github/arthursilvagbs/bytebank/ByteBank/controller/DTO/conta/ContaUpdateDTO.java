@@ -1,4 +1,6 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.conta;
 
-public record ContaUpdateDTO() {
+import java.math.BigDecimal;
+
+public record ContaUpdateDTO(BigDecimal saldo) {
 }
