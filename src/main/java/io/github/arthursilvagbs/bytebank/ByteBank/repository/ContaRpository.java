@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface ContaRpository extends JpaRepository<Conta, UUID> {
 
-    boolean findByCliente(Cliente cliente);
+    boolean existsByCliente(Cliente cliente);
     List<Conta> findAllByCliente(Cliente cliente);
-    Optional<Conta> finfByNumeroConta(Integer numeroConta);
+    Optional<Conta> findByNumeroConta(Integer numeroConta);
 }

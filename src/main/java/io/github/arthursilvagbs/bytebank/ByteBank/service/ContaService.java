@@ -6,7 +6,9 @@ import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ClienteRespository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRpository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +37,7 @@ public class ContaService {
     }
 
     public Optional<Conta> obterPorNumConta(Integer numeroConta) {
-        return repository.finfByNumeroConta(numeroConta);
+        return repository.findByNumeroConta(numeroConta);
     }
 
     public void deletar(Conta conta) {

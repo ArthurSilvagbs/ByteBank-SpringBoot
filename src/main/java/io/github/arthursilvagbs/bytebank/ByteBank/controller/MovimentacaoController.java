@@ -1,11 +1,10 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.movimentacao.MovimentacaoCreateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.movimentacao.MovimentacaoCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Movimentacao;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.ContaService;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.MovimentacaoService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

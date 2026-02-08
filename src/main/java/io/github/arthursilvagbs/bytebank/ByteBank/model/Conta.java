@@ -29,7 +29,6 @@ public class Conta {
     private UUID id;
 
     @Column(nullable = false, unique = true)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer numeroConta;
 
     @CreatedDate
@@ -51,12 +50,8 @@ public class Conta {
     private List<Movimentacao> saidas = new ArrayList<>();
 
     @PrePersist
-    public void gerarSaldoIncial() {
+    public void prePersist() {
         this.saldo = BigDecimal.ZERO;
-    }
-
-    @PrePersist
-    public void gerarNumeroConta() {
         this.numeroConta = new Random().nextInt(90000) + 10000;
     }
 

@@ -1,6 +1,6 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente.*;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.*;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
@@ -21,10 +21,10 @@ public class ClienteController {
 
     private final ClienteService service;
 
-    @PostMapping
-    public ResponseEntity<Object> salvarPessoaFisica(@RequestBody PessoaFisicaCreateDTO pessoaFisicaCreateDTO) {
+    @PostMapping("/pf")
+    public ResponseEntity<Object> salvarPessoaFisica(@RequestBody PessoaFisicaCreateDTO dto) {
 
-        PessoaFisica novoCliente = pessoaFisicaCreateDTO.mapearParaPessoaFisica();
+        PessoaFisica novoCliente = dto.mapearParaPessoaFisica();
 
         service.salvar(novoCliente);
 
@@ -37,10 +37,10 @@ public class ClienteController {
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping
-    public ResponseEntity<Object> salvarPessoaJuridica(@RequestBody PessoaJuridicaCreateDTO pessoaJuridicaCreateDTO) {
+    @PostMapping("/pj")
+    public ResponseEntity<Object> salvarPessoaJuridica(@RequestBody PessoaJuridicaCreateDTO dto) {
 
-        PessoaJuridica novoCliente = pessoaJuridicaCreateDTO.mapearParaPessoaJuridica();
+        PessoaJuridica novoCliente = dto.mapearParaPessoaJuridica();
 
         service.salvar(novoCliente);
 

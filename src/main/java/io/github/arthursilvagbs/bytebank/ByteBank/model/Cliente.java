@@ -46,7 +46,7 @@ public class Cliente {
     private Boolean ativo = true;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_conta", nullable = false)
+    @Column(name = "tipo_cliente", nullable = false)
     private TipoCliente tipoCliente;
 
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
@@ -57,6 +57,7 @@ public class Cliente {
         this.email = email;
         this.telefone = telefone;
         this.endereco = endereco;
+        this.tipoCliente = tipoCliente;
     }
 
     public Cliente() {

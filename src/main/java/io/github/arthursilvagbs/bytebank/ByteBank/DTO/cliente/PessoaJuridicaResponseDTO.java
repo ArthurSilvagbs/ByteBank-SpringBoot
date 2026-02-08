@@ -1,4 +1,4 @@
-package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.cliente;
+package io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.model.TipoCliente;
 

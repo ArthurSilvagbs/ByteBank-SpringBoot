@@ -1,4 +1,4 @@
-package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.conta;
+package io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -53,7 +53,7 @@ public class ClienteService {
     }
 
     public boolean possuiConta(Cliente cliente) {
-        return contaRpository.findByCliente(cliente);
+        return contaRpository.existsByCliente(cliente);
     }
 
 }

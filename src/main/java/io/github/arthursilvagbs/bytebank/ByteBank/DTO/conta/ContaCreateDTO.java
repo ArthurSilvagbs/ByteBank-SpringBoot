@@ -1,11 +1,13 @@
-package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.conta;
+package io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 
-public record ContaCreateDTO(Cliente cliente) {
+import java.util.UUID;
+
+public record ContaCreateDTO(UUID idCliente) {
 
     public Conta mapearParaCliente() {
-        return new Conta(this.cliente);
+        return new Conta(this.idCliente);
     }
 }

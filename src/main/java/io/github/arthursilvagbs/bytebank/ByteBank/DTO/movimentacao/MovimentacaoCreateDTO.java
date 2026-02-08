@@ -1,4 +1,4 @@
-package io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.movimentacao;
+package io.github.arthursilvagbs.bytebank.ByteBank.DTO.movimentacao;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Movimentacao;

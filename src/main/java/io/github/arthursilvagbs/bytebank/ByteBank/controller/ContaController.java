@@ -1,8 +1,8 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.conta.ContaCreateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.conta.ContaResponseDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.controller.DTO.conta.ContaUpdateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaCreateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaResponseDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaUpdateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.ClienteService;
