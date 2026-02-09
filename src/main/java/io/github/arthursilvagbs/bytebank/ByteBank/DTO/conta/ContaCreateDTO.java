@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record ContaCreateDTO(UUID idCliente) {
 
-    public Conta mapearParaCliente() {
-        return new Conta(this.idCliente);
-    }
+//    public Conta mapearParaCliente() {
+//        return new Conta(this.idCliente);
+//    }
 }
