@@ -85,6 +85,3 @@ O projeto segue os padrões de arquitetura em camadas, promovendo a separação 
 *   [ ] Implementação de autenticação e autorização com Spring Security.
 *   [ ] Finalização dos mappers para todos os tipos de clientes.
 
----
-
-*Gerado por Manus AI em 27 de fevereiro de 2026.*
