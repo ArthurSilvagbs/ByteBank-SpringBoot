@@ -30,7 +30,8 @@ public class ContaController {
         Optional<Cliente> cliente = clienteService.obterPorId(id);
 
         if (cliente.isEmpty()) {
-            throw new IllegalArgumentException("O cliente não foi encontrado com o ID inserido.");
+            System.out.println("Cliente não encontrado.");
+            return ResponseEntity.notFound().build();
         }
 
         ContaCreateDTO dto = new ContaCreateDTO(cliente.get());

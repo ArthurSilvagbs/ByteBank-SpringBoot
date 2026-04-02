@@ -5,9 +5,9 @@ import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 
 import java.util.UUID;
 
-public record ContaCreateDTO(UUID idCliente) {
+public record ContaCreateDTO(Cliente cliente) {
 
-//    public Conta mapearParaCliente() {
-//        return new Conta(this.idCliente);
-//    }
+    public Conta mapearParaCliente() {
+        return new Conta(this.cliente);
+    }
 }
