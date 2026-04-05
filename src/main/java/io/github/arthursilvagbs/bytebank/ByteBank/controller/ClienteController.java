@@ -6,9 +6,13 @@ import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +33,18 @@ public class ClienteController {
     @Operation(description = "Criar um cliente Pessoa Física")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "Cria o cliente Pessoa Física e devolve a url cliente criado no response"),
-                    @ApiResponse(responseCode = "400", description = "Dados inválidos na request")
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Cliente Pessoa Física criada com sucesso.",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Dados inválidos na request")
             }
     )
     @PostMapping("/pf")
-    public ResponseEntity<Object> salvarPessoaFisica(@RequestBody PessoaFisicaCreateDTO dto) {
+    public ResponseEntity<Object> salvarPessoaFisica(@RequestBody @Valid PessoaFisicaCreateDTO dto) {
 
         PessoaFisica novoCliente = dto.mapearParaPessoaFisica();
 
@@ -52,7 +62,11 @@ public class ClienteController {
     @Operation(description = "Criar um cliente Pessoa Juridica")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "Cria o cliente Pessoa Juridica e devolve a url cliente criado no response"),
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Cliente Pessoa Jurídica criada com sucesso.",
+                            content = @Content
+                    ),
                     @ApiResponse(responseCode = "400", description = "Dados inválidos na request")
             }
     )
@@ -75,13 +89,27 @@ public class ClienteController {
     @Operation(description = "Buscar um cliente no banco via ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Retorna o cliente encontrado no body da response"),
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Retorna o cliente encontrado no body da response",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            oneOf = {PessoaFisicaResponseDTO.class, PessoaJuridicaResponseDTO.class},
+                                            description = "Pode retornar Pessoa Física ou Pessoa Jurídica"
+                                    ),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de retorno",
+                                            value = "{\"id\": \"123e4567-e89b-12d3-a456-426614174000\", \"nome\": \"João Silva\", \"email\": \"joao@email.com\"}"
+                                    )
+                            )
+                    ),
                     @ApiResponse(responseCode = "400", description = "Dados inválidos na request"),
                     @ApiResponse(responseCode = "404", description = "ID informado não foi encontrado no banco de dados")
             }
     )
     @GetMapping("{id}")
-    public ResponseEntity<Object> buscarPorId(@PathVariable("id") String id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable("id") String id) {
 
         UUID uuid = UUID.fromString(id);
 
@@ -126,7 +154,18 @@ public class ClienteController {
     @Operation(description = "Atualizar um cliente existente no banco de dados, buscando-o via ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "Encontra o cliente via ID, e atualiza os dados dele, com os novos dados informados dentro do body da request"),
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Encontra o cliente via ID, e atualiza os dados dele, com os novos dados informados dentro do body da request",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(oneOf = {PessoaFisicaResponseDTO.class, PessoaJuridicaResponseDTO.class}),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de retorno",
+                                            value = "{ \"id\": \"123e4567-e89b-12d3-a456-426614174000\", \"nome\": \"João Silva\", \"email\": \"joao@email.com\" }"
+                                    )
+                            )
+                    ),
                     @ApiResponse(responseCode = "400", description = "Dados inválidos na request"),
                     @ApiResponse(responseCode = "404", description = "ID do cliente não encontrado no banco de dados, cliente não encontrado")
             }
@@ -154,7 +193,13 @@ public class ClienteController {
     @Operation(description = "Atualizar um cliente existente no banco de dados, buscando-o via ID")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "Encontra o cliente via ID, e deleta ele, retornando que ele não existe mais"),
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Cliente deletado com sucesso.",
+                            content = @Content(
+                                    mediaType = "application/json"
+                            )
+                    ),
                     @ApiResponse(responseCode = "400", description = "Dados inválidos na request"),
                     @ApiResponse(responseCode = "404", description = "ID do cliente não encontrado no banco de dados, cliente não encontrado")
             }
