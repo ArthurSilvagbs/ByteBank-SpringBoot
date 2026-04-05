@@ -1,4 +1,19 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente;
 
-public record ClienteUpdateDTO(String nome, String email, String telefone, String endereco) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record ClienteUpdateDTO(
+
+   @Schema(description = "Nome do cliente", example = "João Pedro Silva")
+   String nome,
+
+   @Schema(description = "Email do cliente", example = "joaosilva@email.com")
+   String email,
+
+   @Schema(description = "Telefone do cliente", example = "00912345678")
+   String telefone,
+
+   @Schema(description = "Endereço do cliente", example = "Rua das Palmeiras, nº 452, Bairro Jardim Alvorada, Brasília")
+   String endereco
+) {
 }
