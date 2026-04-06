@@ -29,7 +29,7 @@ public class Transacao {
    private BigDecimal valor;
 
    @ManyToOne
-   @JoinColumn(name = "conta_origem_id")
+   @JoinColumn(name = "conta_origem_id", nullable = false)
    private Conta contaOrigem;
 
    @ManyToOne
@@ -37,12 +37,19 @@ public class Transacao {
    private Conta contaDestino;
 
    @CreatedDate
-   @Column(name = )
-   private LocalDateTime dataHora
+   @Column(name = "data_hora", nullable = false)
+   private LocalDateTime dataHora;
 
    public Transacao() {}
 
-   public Transacao(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
+   public Transacao(BigDecimal valor, Conta contaOrigem, Conta contaDestino) {
+      this.valor = valor;
+      this.contaOrigem = contaOrigem;
+      this.contaDestino = contaDestino;
+   }
 
+   public Transacao(Conta contaOrigem, BigDecimal valor) {
+      this.contaOrigem = contaOrigem;
+      this.valor = valor;
    }
 }
