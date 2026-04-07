@@ -1,5 +1,6 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.model;
 
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaJuridicaCreateDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,4 +22,8 @@ public class PessoaJuridica extends Cliente {
         this.cnpj = cnpj;
     }
 
+   public PessoaJuridica(PessoaJuridicaCreateDTO dto) {
+      super(dto.nome(), dto.email(), dto.telefone(), dto.endereco(), TipoCliente.PESSOA_JURIDICCA);
+      this.cnpj = dto.cnpj();
+   }
 }

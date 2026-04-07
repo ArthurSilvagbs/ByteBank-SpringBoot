@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    driver-class-name: org.hibernate.dialect.H2Dialect
+    username: sa
+    password:
+  jpa:
+    database-plataform: org.hibernate.dialect.H2Dialect

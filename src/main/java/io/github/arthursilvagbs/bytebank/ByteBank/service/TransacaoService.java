@@ -2,7 +2,6 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransacaoCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaCreateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaResponseDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.SaldoInsuficienteException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.TransacaoMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;

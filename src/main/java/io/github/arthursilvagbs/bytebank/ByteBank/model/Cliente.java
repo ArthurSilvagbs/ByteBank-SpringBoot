@@ -1,9 +1,9 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.model;
 
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaFisicaCreateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaJuridicaCreateDTO;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,6 +17,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Cliente {
@@ -60,6 +62,19 @@ public class Cliente {
         this.tipoCliente = tipoCliente;
     }
 
-    public Cliente() {
-    }
+   public Cliente(PessoaFisicaCreateDTO dto) {
+      this.nome = dto.nome();
+      this.email = dto.email();
+      this.telefone = dto.telefone();
+      this.endereco = dto.endereco();
+      this.tipoCliente = TipoCliente.PESSOA_FISICA;
+   }
+
+   public Cliente(PessoaJuridicaCreateDTO dto) {
+      this.nome = dto.nome();
+      this.email = dto.email();
+      this.telefone = dto.telefone();
+      this.endereco = dto.endereco();
+      this.tipoCliente = TipoCliente.PESSOA_FISICA;
+   }
 }
