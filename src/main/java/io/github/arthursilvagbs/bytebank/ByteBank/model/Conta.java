@@ -44,10 +44,10 @@ public class Conta {
     private Cliente cliente;
 
     @OneToMany(mappedBy = "contaOrigem", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<Movimentacao> entradas = new ArrayList<>();
+    private List<Transacao> entradas = new ArrayList<>();
 
     @OneToMany(mappedBy = "contaDestino", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<Movimentacao> saidas = new ArrayList<>();
+    private List<Transacao> saidas = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
