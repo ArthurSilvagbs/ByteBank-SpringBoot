@@ -1,6 +1,5 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaFisicaResponseDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaResponseDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaUpdateDTO;
