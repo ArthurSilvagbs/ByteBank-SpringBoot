@@ -3,7 +3,9 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransacaoCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaResponseDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ContaNaoEncontradaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.SaldoInsuficienteException;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ValorInvalidoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.TransacaoMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Transacao;
@@ -11,6 +13,7 @@ import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRpository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.TransacaoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,24 +25,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TransacaoService {
 
-   private final TransacaoRepository repository;
-   private final ContaRpository contaRepository;
-   private final TransacaoMapper mapper;
+   @Autowired
+   private TransacaoRepository repository;
 
-   public Transacao salvar(Transacao transacao) {
-      return repository.save(transacao);
-   }
+   @Autowired
+   private ContaRpository contaRepository;
+
+   @Autowired
+   private TransacaoMapper mapper;
 
    public Transacao deposito(TransacaoCreateDTO dto) {
       Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
-         .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+         .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
-      if (dto.valor().compareTo(BigDecimal.ZERO) < 0) {
-         throw new RuntimeException("Valor negativo não permitido");
-      }
-
-      if (contaOrigem.getSaldo().compareTo(dto.valor()) < 0) {
-         throw new SaldoInsuficienteException("Saldo insuficiente");
+      if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
+         throw new ValorInvalidoException("Valor negativo não permitido");
       }
 
       BigDecimal saldoAtual = contaOrigem.getSaldo().add(dto.valor());
@@ -51,13 +51,13 @@ public class TransacaoService {
 
    public Transacao saque(TransacaoCreateDTO dto) {
       Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
-         .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+         .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
-      if (dto.valor().compareTo(BigDecimal.ZERO) < 0) {
-         throw new RuntimeException("Valor negativo não permitido");
+      if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
+         throw new ValorInvalidoException("Valor negativo não permitido");
       }
 
-      if (contaOrigem.getSaldo().compareTo(dto.valor()) < 0) {
+      if (contaOrigem.getSaldo().compareTo(dto.valor()) <= 0) {
          throw new SaldoInsuficienteException("Saldo insuficiente");
       }
 
@@ -69,19 +69,19 @@ public class TransacaoService {
    }
 
    public Transacao transferencia(TransferenciaCreateDTO dto) {
-      if (dto.valor().compareTo(BigDecimal.ZERO) < 0) {
+      if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
          throw new RuntimeException("Valor negativo não é permitido");
       }
 
       Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
-         .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+         .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
-      if (contaOrigem.getSaldo().compareTo(dto.valor()) < 0) {
+      if (contaOrigem.getSaldo().compareTo(dto.valor()) <= 0) {
          throw new SaldoInsuficienteException("Saldo insuficiente");
       }
 
       Conta contaDestino = contaRepository.findById(dto.IdContaDestino())
-         .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+         .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
       BigDecimal saldoContaOrigem = contaOrigem.getSaldo().subtract(dto.valor());
       contaOrigem.setSaldo(saldoContaOrigem);
