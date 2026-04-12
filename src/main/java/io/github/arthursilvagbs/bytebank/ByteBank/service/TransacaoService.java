@@ -70,7 +70,7 @@ public class TransacaoService {
 
    public Transacao transferencia(TransferenciaCreateDTO dto) {
       if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
-         throw new RuntimeException("Valor negativo não é permitido");
+         throw new ValorInvalidoException("Valor negativo não é permitido");
       }
 
       Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())

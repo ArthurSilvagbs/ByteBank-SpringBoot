@@ -1,6 +1,7 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransacaoCreateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ContaNaoEncontradaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.SaldoInsuficienteException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ValorInvalidoException;
@@ -174,14 +175,109 @@ class TransacaoServiceTest {
    }
 
    @Test
-   void transferencia() {
+   @DisplayName("Deve efetuar a transferencia com sucesso")
+   void transferenciaSuccess() {
+      UUID contaOrigemId = UUID.randomUUID();
+      Conta contaOrigem = new Conta();
+      contaOrigem.setSaldo(new BigDecimal("500.00"));
+
+      UUID contaDestinoId = UUID.randomUUID();
+      Conta contaDestino = new Conta();
+      contaDestino.setSaldo(new BigDecimal("0.00"));
+
+      TransferenciaCreateDTO dto = new TransferenciaCreateDTO(new BigDecimal("250.00"), contaOrigemId, contaDestinoId);
+
+      Transacao transacaoMapeada = new Transacao();
+
+      when(contaRepository.findById(contaOrigemId)).thenReturn(Optional.of(contaOrigem));
+      when(contaRepository.findById(contaDestinoId)).thenReturn(Optional.of(contaDestino));
+      when(mapper.mapearParaTransferencia(any(), any(), any())).thenReturn(transacaoMapeada);
+      when(repository.save(any())).thenReturn(transacaoMapeada);
+
+      Transacao resultado = service.transferencia(dto);
+
+      assertNotNull(resultado);
+      assertEquals(new BigDecimal("250.00"), contaOrigem.getSaldo());
+      assertEquals(new BigDecimal("250.00"), contaDestino.getSaldo());
+
+      verify(contaRepository).save(contaOrigem);
+      verify(contaRepository).save(contaDestino);
+      verify(repository).save(resultado);
    }
 
    @Test
-   void buscarTransacaoPorId() {
+   @DisplayName("Deve lançar uma exception de conta não encontrada, em relação a conta origem")
+   void tranferenciaContaOrigemNaoEncontrada() {
+      UUID contaOrigemId = UUID.randomUUID();
+      UUID contaDestinoId = UUID.randomUUID();
+      TransferenciaCreateDTO dto = new TransferenciaCreateDTO(new BigDecimal("200.00"), contaOrigemId, contaDestinoId);
+
+      when(contaRepository.findById(contaOrigemId)).thenReturn(Optional.empty());
+
+      assertThrows(ContaNaoEncontradaException.class, () -> service.transferencia(dto));
    }
 
    @Test
-   void buscarMovimentacoesPorConta() {
+   @DisplayName("Deve lançar uma exception de conta não encontrada, em relação a conta destino")
+   void tranferenciaContaDestinoNaoEncontrada() {
+      UUID contaOrigemId = UUID.randomUUID();
+      Conta contaOrigem = new Conta();
+      contaOrigem.setSaldo(new BigDecimal("500.00"));
+
+      UUID contaDestinoId = UUID.randomUUID();
+      TransferenciaCreateDTO dto = new TransferenciaCreateDTO(new BigDecimal("200.00"), contaOrigemId, contaDestinoId);
+
+      when(contaRepository.findById(contaOrigemId)).thenReturn(Optional.of(contaOrigem));
+      when(contaRepository.findById(contaDestinoId)).thenReturn(Optional.empty());
+
+      assertThrows(ContaNaoEncontradaException.class, () -> service.transferencia(dto));
+   }
+
+   @Test
+   @DisplayName("Deve lançar uma exception para uma tranferencia com valor negativo")
+   void transferenciaValorNegativo() {
+      UUID contaOrigemId = UUID.randomUUID();
+      Conta contaOrigem = new Conta();
+      contaOrigem.setSaldo(new BigDecimal("500.00"));
+
+      UUID contaDestinoId = UUID.randomUUID();
+      Conta contaDestino = new Conta();
+      contaDestino.setSaldo(new BigDecimal("100.00"));
+
+      TransferenciaCreateDTO dto = new TransferenciaCreateDTO(new BigDecimal("-200.00"), contaOrigemId, contaDestinoId);
+
+      assertThrows(ValorInvalidoException.class, () -> service.transferencia(dto));
+   }
+
+   @Test
+   @DisplayName("Deve lançar uma exception para uma tranferencia com valor igual a 0")
+   void transferenciaValorZero() {
+      UUID contaOrigemId = UUID.randomUUID();
+      Conta contaOrigem = new Conta();
+      contaOrigem.setSaldo(new BigDecimal("500.00"));
+
+      UUID contaDestinoId = UUID.randomUUID();
+      Conta contaDestino = new Conta();
+      contaDestino.setSaldo(new BigDecimal("100.00"));
+
+      TransferenciaCreateDTO dto = new TransferenciaCreateDTO(new BigDecimal("0.00"), contaOrigemId, contaDestinoId);
+
+      assertThrows(ValorInvalidoException.class, () -> service.transferencia(dto));
+   }
+
+   @Test
+   @DisplayName("Deve lançar uma exceptio pra saldo insuficiente")
+   void transferenciaSaldoInsuficiente() {
+      UUID contaOrigemId = UUID.randomUUID();
+      Conta contaOrigem = new Conta();
+      contaOrigem.setSaldo(new BigDecimal("100.00"));
+
+      UUID contaDestinoId = UUID.randomUUID();
+
+      TransferenciaCreateDTO dto = new TransferenciaCreateDTO(new BigDecimal("200.00"), contaOrigemId, contaDestinoId);
+
+      when(contaRepository.findById(contaOrigemId)).thenReturn(Optional.of(contaOrigem));
+
+      assertThrows(SaldoInsuficienteException.class, () -> service.transferencia(dto));
    }
 }
