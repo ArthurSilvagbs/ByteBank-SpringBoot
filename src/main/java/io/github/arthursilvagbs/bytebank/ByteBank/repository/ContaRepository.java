@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ContaRpository extends JpaRepository<Conta, UUID> {
+public interface ContaRepository extends JpaRepository<Conta, UUID> {
 
     boolean existsByCliente(Cliente cliente);
     List<Conta> findAllByCliente(Cliente cliente);

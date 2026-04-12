@@ -46,14 +46,12 @@ public class ClienteController {
    @PostMapping("/pf")
    public ResponseEntity<Object> salvarPessoaFisica(@RequestBody @Valid PessoaFisicaCreateDTO dto) {
 
-      PessoaFisica novoCliente = dto.mapearParaPessoaFisica();
-
-      service.salvar(novoCliente);
+      Cliente cliente = service.salvarPessoaFisica(dto);
 
       URI location = ServletUriComponentsBuilder
          .fromCurrentRequest()
          .path("/{id}")
-         .buildAndExpand(novoCliente.getId())
+         .buildAndExpand(cliente.getId())
          .toUri();
 
       return ResponseEntity.created(location).build();
@@ -71,16 +69,14 @@ public class ClienteController {
       }
    )
    @PostMapping("/pj")
-   public ResponseEntity<Object> salvarPessoaJuridica(@RequestBody PessoaJuridicaCreateDTO dto) {
+   public ResponseEntity<Object> salvarPessoaJuridica(@RequestBody @Valid PessoaJuridicaCreateDTO dto) {
 
-      PessoaJuridica novoCliente = dto.mapearParaPessoaJuridica();
-
-      service.salvar(novoCliente);
+      Cliente cliente = service.salvarPessoaJuridica(dto);
 
       URI location = ServletUriComponentsBuilder
          .fromCurrentRequest()
          .path("/{id}")
-         .buildAndExpand(novoCliente.getId())
+         .buildAndExpand(cliente.getId())
          .toUri();
 
       return ResponseEntity.created(location).build();

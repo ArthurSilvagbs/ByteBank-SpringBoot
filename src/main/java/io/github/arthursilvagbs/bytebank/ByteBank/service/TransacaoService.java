@@ -2,16 +2,14 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransacaoCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaCreateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaResponseDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ContaNaoEncontradaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.SaldoInsuficienteException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ValorInvalidoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.TransacaoMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Transacao;
-import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRpository;
+import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.TransacaoRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class TransacaoService {
    private TransacaoRepository repository;
 
    @Autowired
-   private ContaRpository contaRepository;
+   private ContaRepository contaRepository;
 
    @Autowired
    private TransacaoMapper mapper;

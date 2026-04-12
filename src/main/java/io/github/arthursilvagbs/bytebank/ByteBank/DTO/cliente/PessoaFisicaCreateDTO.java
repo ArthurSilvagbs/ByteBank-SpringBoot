@@ -31,9 +31,4 @@ public record PessoaFisicaCreateDTO(
    @NotBlank(message = "CPF é um campo obrigatório")
    @CPF(message = "Precisa ser um CPF válido")
    String cpf
-) {
-
-   public PessoaFisica mapearParaPessoaFisica() {
-      return new PessoaFisica(this.nome, this.email, this.telefone, this.endereco, TipoCliente.PESSOA_FISICA, this.cpf);
-   }
-}
+) {}

@@ -1,14 +1,10 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.OperacaoNaoPermitidaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
-import io.github.arthursilvagbs.bytebank.ByteBank.repository.ClienteRespository;
-import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRpository;
+import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ContaService {
 
-    private final ContaRpository repository;
+    private final ContaRepository repository;
     private final ClienteService clienteService;
 
     public Conta salvar(Conta conta){

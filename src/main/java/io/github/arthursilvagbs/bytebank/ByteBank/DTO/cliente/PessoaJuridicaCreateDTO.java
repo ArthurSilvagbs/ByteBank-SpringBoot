@@ -30,9 +30,4 @@ public record PessoaJuridicaCreateDTO(
    @NotBlank(message = "CNPJ é um campo obrigatório")
    @CNPJ(message = "Precisa ser um CNPJ válido")
    String cnpj
-) {
-
-   public PessoaJuridica mapearParaPessoaJuridica() {
-      return new PessoaJuridica(this.nome, this.email, this.telefone, this.endereco, TipoCliente.PESSOA_JURIDICCA, this.cnpj);
-   }
-}
+) {}

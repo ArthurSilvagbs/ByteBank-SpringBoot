@@ -8,7 +8,7 @@ import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ValorInvalidoExcept
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.TransacaoMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Transacao;
-import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRpository;
+import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.TransacaoRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class TransacaoServiceTest {
    private TransacaoRepository repository;
 
    @Mock
-   private ContaRpository contaRepository;
+   private ContaRepository contaRepository;
 
    @Mock
    private TransacaoMapper mapper;
