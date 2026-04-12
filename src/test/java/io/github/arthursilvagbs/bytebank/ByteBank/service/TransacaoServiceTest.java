@@ -2,6 +2,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransacaoCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ContaNaoEncontradaException;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.SaldoInsuficienteException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ValorInvalidoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.TransacaoMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
@@ -64,7 +65,7 @@ class TransacaoServiceTest {
    }
 
    @Test
-   @DisplayName("Deve lançar uma exceção de conta não encontrada")
+   @DisplayName("Deve lançar uma exception de conta não encontrada")
    void depositoContaNaoEncontrada() {
       UUID contaId = UUID.randomUUID();
       TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("200.00"), contaId);
@@ -102,28 +103,75 @@ class TransacaoServiceTest {
 
    @Test
    @DisplayName("Deve efetuar o saque com sucesso")
-   void saque() {
+   void saqueSuccess() {
       UUID contaId = UUID.randomUUID();
       Conta conta = new Conta();
-      conta.setSaldo(new BigDecimal("500"));
+      conta.setSaldo(new BigDecimal("500.00"));
 
-      TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("100"), contaId);
+      TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("200.00"), contaId);
+
       Transacao transacaoMapeada = new Transacao();
-
-      Transacao resultado = service.saque(dto);
 
       when(contaRepository.findById(contaId)).thenReturn(Optional.of(conta));
       when(mapper.mapearParaTransacao(any(), any())).thenReturn(transacaoMapeada);
       when(repository.save(any())).thenReturn(transacaoMapeada);
 
-      assertNotNull(resultado);
-      assertEquals(new BigDecimal("600"), conta.getSaldo());
+      Transacao resultado = service.saque(dto);
 
-      verify(contaRepository.save(conta));
-      verify(repository.save(resultado));
+      assertNotNull(resultado);
+      assertEquals(new BigDecimal("300.00"), conta.getSaldo());
+
+      verify(contaRepository).save(conta);
+      verify(repository).save(transacaoMapeada);
    }
 
+   @Test
+   @DisplayName("Deve lançar uma exception de conta não encontrada")
+   void saqueContaNaoEncontrada() {
+      UUID contaId = UUID.randomUUID();
+      TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("200.00"), contaId);
+      when(contaRepository.findById(contaId)).thenReturn(Optional.empty());
+      assertThrows(ContaNaoEncontradaException.class, () -> service.saque(dto));
+   }
 
+   @Test
+   @DisplayName("Deve lançar uma exception para um deposito com valor negativo")
+   void saqueValorNegativo() {
+      UUID contaId = UUID.randomUUID();
+      Conta conta = new Conta();
+      conta.setSaldo(new BigDecimal("500.00"));
+      TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("-200.00"), contaId);
+
+      when(contaRepository.findById(contaId)).thenReturn(Optional.of(conta));
+
+      assertThrows(ValorInvalidoException.class, () -> service.saque(dto));
+   }
+
+   @Test
+   @DisplayName("Deve lançar uma exception para um deposito com valor igual a 0")
+   void saqueValorZero() {
+      UUID contaId = UUID.randomUUID();
+      Conta conta = new Conta();
+      conta.setSaldo(new BigDecimal("500.00"));
+      TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("0.00"), contaId);
+
+      when(contaRepository.findById(contaId)).thenReturn(Optional.of(conta));
+
+      assertThrows(ValorInvalidoException.class, () -> service.saque(dto));
+   }
+
+   @Test
+   @DisplayName("Deve lançar uma exception pra quando o saldo da conta for insuficiente para o saque")
+   void saqueSaldoInsuficiente() {
+      UUID contaId = UUID.randomUUID();
+      Conta conta = new Conta();
+      conta.setSaldo(new BigDecimal("200.00"));
+      TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("500.00"), contaId);
+
+      when(contaRepository.findById(contaId)).thenReturn(Optional.of(conta));
+
+      assertThrows(SaldoInsuficienteException.class, () -> service.saque(dto));
+   }
 
    @Test
    void transferencia() {
