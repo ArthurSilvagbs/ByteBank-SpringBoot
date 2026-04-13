@@ -2,6 +2,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaFisicaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaJuridicaCreateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.RegistroDuplicadoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ClienteMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
@@ -52,6 +53,32 @@ class ClienteServiceTest {
       assertNotNull(resultado);
 
       verify(repository).save(clienteMapeado);
+   }
+
+   @Test
+   @DisplayName("Deve lançar uma exception de registro duplicado")
+   void salvarPessoaFisicaDuplicada() {
+      PessoaFisicaCreateDTO dto = new PessoaFisicaCreateDTO("nome", "teste@email.com", "12345678", "endereço", "12345678900");
+
+      Cliente clienteMapeado = new PessoaFisica();
+
+      when(mapper.mapearParaPessoaFisica(dto)).thenReturn(clienteMapeado);
+
+      Cliente resultado = service.salvarPessoaFisica(dto);
+
+      assertNotNull(resultado);
+
+      verify(repository).save(clienteMapeado);
+   }
+
+   @Test
+   @DisplayName("Deve lançar uma exception de registro duplicado, sendo ativado pelo CPF, que ja esta cadastrado")
+   void salvarPessoaFisicaCpfJaCadastrado() {
+      PessoaFisicaCreateDTO dto = new PessoaFisicaCreateDTO("nome", "teste@email.com", "12345678", "endereço", "12345678900");
+
+      when(repository.findByCpf("12345678900")).thenReturn(Optional.empty());
+
+      assertThrows(RegistroDuplicadoException.class, () -> service.salvarPessoaFisica(dto));
    }
 
    @Test

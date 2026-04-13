@@ -1,13 +1,16 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.ClienteUpdateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaFisicaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaJuridicaCreateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEcontradoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.OperacaoNaoPermitidaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.RegistroDuplicadoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ClienteMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ClienteRepository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,10 +44,12 @@ public class ClienteService {
       return repository.save(cliente);
    }
 
-   public void atualizar(Cliente cliente) {
-      if (cliente.getId() == null) {
-         throw new IllegalArgumentException("Para atualizar um cliente, é ncessário que ele esteja cadastrado.");
-      }
+   public void atualizar(UUID id, ClienteUpdateDTO dto) {
+      Cliente cliente = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+      cliente.setNome(dto.nome());
+      cliente.setEmail(dto.email());
+      cliente.setTelefone(dto.telefone());
+      cliente.setEndereco(dto.endereco());
       repository.save(cliente);
    }
 

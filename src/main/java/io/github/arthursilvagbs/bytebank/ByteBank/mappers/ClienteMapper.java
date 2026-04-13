@@ -1,5 +1,6 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.mappers;
 
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.ClienteUpdateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaFisicaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaJuridicaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
