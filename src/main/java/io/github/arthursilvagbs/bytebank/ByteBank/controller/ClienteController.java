@@ -2,6 +2,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.*;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
+import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.ClienteService;
@@ -168,8 +169,7 @@ public class ClienteController {
    )
    @PutMapping("{id}")
    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody ClienteUpdateDTO dto) {
-      UUID clienteId = UUID.fromString(id);
-      service.atualizar(clienteId, dto);
+      service.atualizar(id, dto);
       return ResponseEntity.ok().build();
    }
 
@@ -186,16 +186,8 @@ public class ClienteController {
       }
    )
    @DeleteMapping("{id}")
-   public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
-      UUID idCliente = UUID.fromString(id);
-      Optional<Cliente> clienteEncontrado = service.obterPorId(idCliente);
-
-      if (clienteEncontrado.isEmpty()) {
-         return ResponseEntity.notFound().build();
-      }
-
-      service.deletar(clienteEncontrado.get());
-
+   public ResponseEntity<Object> deletarV1(@PathVariable("id") String id) {
+      service.deletar(id);
       return ResponseEntity.noContent().build();
    }
 

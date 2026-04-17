@@ -44,8 +44,10 @@ public class ClienteService {
       return repository.save(cliente);
    }
 
-   public void atualizar(UUID id, ClienteUpdateDTO dto) {
-      Cliente cliente = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
+   public void atualizar(String id, ClienteUpdateDTO dto) {
+      UUID idCliente  = UUID.fromString(id);
+      Cliente cliente = repository.findById(idCliente).orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
+
       cliente.setNome(dto.nome());
       cliente.setEmail(dto.email());
       cliente.setTelefone(dto.telefone());
@@ -57,7 +59,12 @@ public class ClienteService {
       return repository.findById(id);
    }
 
-   public void deletar(Cliente cliente) {
+   public void deletar(String id) {
+      UUID idCliente = UUID.fromString(id);
+
+      Cliente cliente = repository.findById(idCliente)
+         .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
+
       if (possuiConta(cliente)) {
          throw new OperacaoNaoPermitidaException("O cliente não pode ser deletado, pois ainda existem contas vinculadas a ele.");
       }

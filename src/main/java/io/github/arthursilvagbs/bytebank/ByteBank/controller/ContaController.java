@@ -3,10 +3,8 @@ package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaResponseDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaUpdateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
-import io.github.arthursilvagbs.bytebank.ByteBank.service.ClienteService;
-import io.github.arthursilvagbs.bytebank.ByteBank.service.ContaService;
+import io.github.arthursilvagbs.bytebank.ByteBank.service.ContaService; //mudado pelo claude
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -30,7 +28,6 @@ import java.util.UUID;
 public class ContaController {
 
    private final ContaService service;
-   private final ClienteService clienteService;
 
    @Operation(description = "Criar uma conta")
    @ApiResponses(
@@ -47,19 +44,9 @@ public class ContaController {
       }
    )
    @PostMapping
-   public ResponseEntity<Object> salvar(@RequestBody String idCliente) {
-      UUID id = UUID.fromString(idCliente);
-      Optional<Cliente> cliente = clienteService.obterPorId(id);
+   public ResponseEntity<Object> salvar(@RequestBody ContaCreateDTO dto) {
 
-      if (cliente.isEmpty()) {
-         System.out.println("Cliente não encontrado.");
-         return ResponseEntity.notFound().build();
-      }
-
-      ContaCreateDTO dto = new ContaCreateDTO(cliente.get());
-      Conta conta = dto.mapearParaCliente();
-
-      service.salvar(conta);
+      Conta conta = service.salvar(dto);
 
       URI location = ServletUriComponentsBuilder
          .fromCurrentRequest()
@@ -143,20 +130,8 @@ public class ContaController {
       }
    )
    @PutMapping("{id}")
-   public ResponseEntity<Object> atualizarSaldo(@PathVariable("id") String id, ContaUpdateDTO dto) {
-      UUID idConta = UUID.fromString(id);
-      Optional<Conta> contaOptional = service.obterPorID(idConta);
-
-      if (contaOptional.isEmpty()) {
-         return ResponseEntity.notFound().build();
-      }
-
-      Conta contaEntidade = contaOptional.get();
-
-      contaEntidade.setSaldo(dto.saldo());
-
-      service.atualizar(contaEntidade);
-
+   public ResponseEntity<Object> atualizarSaldo(@PathVariable("id") String id, @RequestBody ContaUpdateDTO dto) {
+      service.atualizar(id, dto);
       return ResponseEntity.ok().build();
    }
 
@@ -180,15 +155,7 @@ public class ContaController {
    )
    @DeleteMapping("{id}")
    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
-      UUID idConta = UUID.fromString(id);
-      Optional<Conta> contaEncontrado = service.obterPorID(idConta);
-
-      if (contaEncontrado.isEmpty()) {
-         return ResponseEntity.notFound().build();
-      }
-
-      service.deletar(contaEncontrado.get());
-
+      service.deletar(id);
       return ResponseEntity.noContent().build();
    }
 }

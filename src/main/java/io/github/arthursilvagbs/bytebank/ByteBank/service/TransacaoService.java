@@ -23,13 +23,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TransacaoService {
 
-   @Autowired
    private TransacaoRepository repository;
-
-   @Autowired
    private ContaRepository contaRepository;
-
-   @Autowired
    private TransacaoMapper mapper;
 
    public Transacao deposito(TransacaoCreateDTO dto) {

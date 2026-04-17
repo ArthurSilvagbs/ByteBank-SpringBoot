@@ -43,10 +43,10 @@ public class Conta {
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "contaOrigem", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "contaDestino", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Transacao> entradas = new ArrayList<>();
 
-    @OneToMany(mappedBy = "contaDestino", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "contaOrigem", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Transacao> saidas = new ArrayList<>();
 
     @PrePersist
