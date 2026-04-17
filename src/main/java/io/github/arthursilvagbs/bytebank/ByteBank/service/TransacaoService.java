@@ -13,6 +13,7 @@ import io.github.arthursilvagbs.bytebank.ByteBank.repository.TransacaoRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +28,7 @@ public class TransacaoService {
    private ContaRepository contaRepository;
    private TransacaoMapper mapper;
 
+   @Transactional
    public Transacao deposito(TransacaoCreateDTO dto) {
       Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
@@ -42,6 +44,7 @@ public class TransacaoService {
       return repository.save(transacao);
    }
 
+   @Transactional
    public Transacao saque(TransacaoCreateDTO dto) {
       Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
@@ -61,6 +64,7 @@ public class TransacaoService {
       return repository.save(transacao);
    }
 
+   @Transactional
    public Transacao transferencia(TransferenciaCreateDTO dto) {
       if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
          throw new ValorInvalidoException("Valor negativo não é permitido");

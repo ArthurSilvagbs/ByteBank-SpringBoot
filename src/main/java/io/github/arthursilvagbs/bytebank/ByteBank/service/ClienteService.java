@@ -13,6 +13,7 @@ import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class ClienteService {
    private final ContaRepository contaRepository;
    private final ClienteMapper mapper;
 
+   @Transactional
    public Cliente salvarPessoaFisica(PessoaFisicaCreateDTO dto) {
       if (repository.findByCpf(dto.cpf()).isPresent() || repository.findByEmail(dto.email()).isPresent()) {
          throw new RegistroDuplicadoException("Cliente já cadastrado");
@@ -35,6 +37,7 @@ public class ClienteService {
       return repository.save(cliente);
    }
 
+   @Transactional
    public Cliente salvarPessoaJuridica(PessoaJuridicaCreateDTO dto) {
       if (repository.findByCpf(dto.cnpj()).isPresent() || repository.findByEmail(dto.email()).isPresent()) {
          throw new RegistroDuplicadoException("Cliente já cadastrado");
@@ -44,6 +47,7 @@ public class ClienteService {
       return repository.save(cliente);
    }
 
+   @Transactional
    public void atualizar(String id, ClienteUpdateDTO dto) {
       UUID idCliente  = UUID.fromString(id);
       Cliente cliente = repository.findById(idCliente).orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
@@ -59,6 +63,7 @@ public class ClienteService {
       return repository.findById(id);
    }
 
+   @Transactional
    public void deletar(String id) {
       UUID idCliente = UUID.fromString(id);
 

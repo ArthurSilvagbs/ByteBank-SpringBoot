@@ -11,6 +11,7 @@ import io.github.arthursilvagbs.bytebank.ByteBank.repository.ClienteRepository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ public class ContaService {
    private final ClienteRepository clienteRepository;
    private final ContaMapper mapper;
 
+   @Transactional
    public Conta salvar(ContaCreateDTO dto){
       Cliente cliente = clienteRepository.findById(dto.clienteId())
          .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
@@ -32,6 +34,7 @@ public class ContaService {
       return repository.save(conta);
    }
 
+   @Transactional
    public void atualizar(String id, ContaUpdateDTO dto) {
       UUID idConta = UUID.fromString(id);
 
@@ -51,6 +54,7 @@ public class ContaService {
       return repository.findByNumeroConta(numeroConta);
    }
 
+   @Transactional
    public void deletar(String id) {
       UUID idConta = UUID.fromString(id);
 
