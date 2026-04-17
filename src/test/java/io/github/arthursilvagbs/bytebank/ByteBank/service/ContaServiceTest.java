@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -109,28 +110,87 @@ class ContaServiceTest {
 
    // ===================== deletar =====================
 
-   // TODO: Deve deletar a conta com sucesso quando ela existir
-   // - mockar repository.findById(id) retornando Optional.of(conta)
-   // - chamar service.deletar(id.toString())
-   // - verify(repository).delete(conta)
+   @Test
+   @DisplayName("Deve deletar a conta com sucesso quando ela existir")
+   void deletarContaComSucesso() {
+      UUID contaId = UUID.randomUUID();
+      Conta conta = new Conta();
 
+      when(repository.findById(contaId)).thenReturn(Optional.of(conta));
 
+      service.deletar(contaId.toString());
 
-   // TODO: Deve lançar ContaNaoEncontradaException ao tentar deletar conta inexistente
-   // - mockar repository.findById(id) retornando Optional.empty()
-   // - assertThrows(ContaNaoEncontradaException.class, () -> service.deletar(id.toString()))
-   // - verify(repository, never()).delete(any())
+      verify(repository).delete(conta);
+   }
+
+   @Test
+   @DisplayName("Deve lançar ContaNaoEncontradaException ao tentar deletar conta inexistente")
+   void deletarContaNaoEncontrada() {
+      UUID contaId = UUID.randomUUID();
+
+      when(repository.findById(contaId)).thenReturn(Optional.empty());
+
+      assertThrows(ContaNaoEncontradaException.class, () -> service.deletar(contaId.toString()));
+
+      verify(repository, never()).delete(any());
+   }
 
    // ===================== obterPorID =====================
 
-   // TODO: Deve retornar Optional com a conta quando o ID existir
-   // - mockar repository.findById(id) retornando Optional.of(conta)
-   // - chamar service.obterPorID(id)
-   // - assertTrue(resultado.isPresent())
-   // - assertEquals(conta, resultado.get())
+   @Test
+   @DisplayName("Deve retornar Optional com a conta quando o ID existir")
+   void obterPorIdComSucesso() {
+      UUID contaId = UUID.randomUUID();
+      Conta conta = new Conta();
 
-   // TODO: Deve retornar Optional vazio quando o ID não existir
-   // - mockar repository.findById(id) retornando Optional.empty()
-   // - chamar service.obterPorID(id)
-   // - assertTrue(resultado.isEmpty())
+      when(repository.findById(contaId)).thenReturn(Optional.of(conta));
+
+      Optional<Conta> resultado = service.obterPorID(contaId);
+
+      assertTrue(resultado.isPresent());
+      assertEquals(conta, resultado.get());
+   }
+
+   @Test
+   @DisplayName("Deve retornar Optional vazio quando o ID não existir")
+   void obterPorIdNaoEncontrado() {
+      UUID contaId = UUID.randomUUID();
+
+      when(repository.findById(contaId)).thenReturn(Optional.empty());
+
+      Optional<Conta> resultado = service.obterPorID(contaId);
+
+      assertTrue(resultado.isEmpty());
+   }
+
+   // ===================== obterTodasAsContas =====================
+
+   @Test
+   @DisplayName("Deve retornar lista de todas as contas")
+   void obterTodasAsContasComSucesso() {
+      List<Conta> contas = List.of(new Conta(), new Conta());
+
+      when(repository.findAll()).thenReturn(contas);
+
+      List<Conta> resultado = service.obterTodasAsContas();
+
+      assertEquals(2, resultado.size());
+      verify(repository).findAll();
+   }
+
+   // ===================== obterContasPorCliente =====================
+
+   @Test
+   @DisplayName("Deve retornar todas as contas vinculadas a um cliente")
+   void obterContasPorClienteComSucesso() {
+      Cliente cliente = new Cliente();
+      List<Conta> contas = List.of(new Conta(), new Conta());
+
+      when(repository.findAllByCliente(cliente)).thenReturn(contas);
+
+      List<Conta> resultado = service.obterContasPorCliente(cliente);
+
+      assertEquals(2, resultado.size());
+      verify(repository).findAllByCliente(cliente);
+   }
 }
