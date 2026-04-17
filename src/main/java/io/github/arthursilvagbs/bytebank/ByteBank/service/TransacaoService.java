@@ -24,9 +24,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TransacaoService {
 
-   private TransacaoRepository repository;
-   private ContaRepository contaRepository;
-   private TransacaoMapper mapper;
+   private final TransacaoRepository repository;
+   private final ContaRepository contaRepository;
+   private final TransacaoMapper mapper;
 
    @Transactional
    public Transacao deposito(TransacaoCreateDTO dto) {
