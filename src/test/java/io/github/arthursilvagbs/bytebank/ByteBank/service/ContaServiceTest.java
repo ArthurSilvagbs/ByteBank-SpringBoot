@@ -138,29 +138,27 @@ class ContaServiceTest {
    // ===================== obterPorID =====================
 
    @Test
-   @DisplayName("Deve retornar Optional com a conta quando o ID existir")
+   @DisplayName("Deve retornar a conta quando o ID existir")
    void obterPorIdComSucesso() {
       UUID contaId = UUID.randomUUID();
       Conta conta = new Conta();
 
       when(repository.findById(contaId)).thenReturn(Optional.of(conta));
 
-      Optional<Conta> resultado = service.obterPorID(contaId);
+      Conta resultado = service.obterPorID(contaId.toString());
 
-      assertTrue(resultado.isPresent());
-      assertEquals(conta, resultado.get());
+      assertNotNull(resultado);
+      assertEquals(conta, resultado);
    }
 
    @Test
-   @DisplayName("Deve retornar Optional vazio quando o ID não existir")
+   @DisplayName("Deve lançar ContaNaoEncontradaException quando o ID não existir")
    void obterPorIdNaoEncontrado() {
       UUID contaId = UUID.randomUUID();
 
       when(repository.findById(contaId)).thenReturn(Optional.empty());
 
-      Optional<Conta> resultado = service.obterPorID(contaId);
-
-      assertTrue(resultado.isEmpty());
+      assertThrows(ContaNaoEncontradaException.class, () -> service.obterPorID(contaId.toString()));
    }
 
    // ===================== obterTodasAsContas =====================

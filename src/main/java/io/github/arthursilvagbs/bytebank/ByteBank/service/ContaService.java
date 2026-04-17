@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,13 +46,16 @@ public class ContaService {
    }
 
    @Transactional(readOnly = true)
-   public Optional<Conta> obterPorID(UUID id) {
-      return repository.findById(id);
+   public Conta obterPorID(String id) {
+      UUID idConta = UUID.fromString(id);
+      return repository.findById(idConta)
+         .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
    }
 
    @Transactional(readOnly = true)
-   public Optional<Conta> obterPorNumConta(Integer numeroConta) {
-      return repository.findByNumeroConta(numeroConta);
+   public Conta obterPorNumConta(Integer numeroConta) {
+      return repository.findByNumeroConta(numeroConta)
+         .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
    }
 
    @Transactional(readOnly = true)

@@ -191,57 +191,53 @@ class ClienteServiceTest {
       verify(repository, never()).delete(any());
    }
 
-   // ===================== obterPorId / pesquisaPorId =====================
+   // ===================== obterPorId =====================
 
    @Test
-   @DisplayName("Deve retornar Optional com o cliente quando o ID existir")
+   @DisplayName("Deve retornar o cliente quando o ID existir")
    void obterPorIdComSucesso() {
       UUID id = UUID.randomUUID();
       Cliente cliente = new Cliente();
 
       when(repository.findById(id)).thenReturn(Optional.of(cliente));
 
-      Optional<Cliente> resultado = service.obterPorId(id);
+      Cliente resultado = service.obterPorId(id.toString());
 
-      assertTrue(resultado.isPresent());
-      assertEquals(cliente, resultado.get());
+      assertNotNull(resultado);
+      assertEquals(cliente, resultado);
    }
 
    @Test
-   @DisplayName("Deve retornar Optional vazio quando o ID não existir")
+   @DisplayName("Deve lançar ClienteNaoEcontradoException quando o ID não existir")
    void obterPorIdNaoEncontrado() {
       UUID id = UUID.randomUUID();
 
       when(repository.findById(id)).thenReturn(Optional.empty());
 
-      Optional<Cliente> resultado = service.obterPorId(id);
-
-      assertTrue(resultado.isEmpty());
+      assertThrows(ClienteNaoEcontradoException.class, () -> service.obterPorId(id.toString()));
    }
 
    // ===================== pesquisaPorNome =====================
 
    @Test
-   @DisplayName("Deve retornar Optional com o cliente quando o nome existir")
+   @DisplayName("Deve retornar o cliente quando o nome existir")
    void pesquisaPorNomeComSucesso() {
       Cliente cliente = new Cliente();
 
       when(repository.findByNome("João")).thenReturn(Optional.of(cliente));
 
-      Optional<Cliente> resultado = service.pesquisaPorNome("João");
+      Cliente resultado = service.pesquisaPorNome("João");
 
-      assertTrue(resultado.isPresent());
-      assertEquals(cliente, resultado.get());
+      assertNotNull(resultado);
+      assertEquals(cliente, resultado);
    }
 
    @Test
-   @DisplayName("Deve retornar Optional vazio quando o nome não existir")
+   @DisplayName("Deve lançar ClienteNaoEcontradoException quando o nome não existir")
    void pesquisaPorNomeNaoEncontrado() {
       when(repository.findByNome("Inexistente")).thenReturn(Optional.empty());
 
-      Optional<Cliente> resultado = service.pesquisaPorNome("Inexistente");
-
-      assertTrue(resultado.isEmpty());
+      assertThrows(ClienteNaoEcontradoException.class, () -> service.pesquisaPorNome("Inexistente"));
    }
 
    // ===================== obterTodosOsClientes =====================

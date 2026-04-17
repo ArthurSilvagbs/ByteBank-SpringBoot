@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -59,8 +58,10 @@ public class ClienteService {
    }
 
    @Transactional(readOnly = true)
-   public Optional<Cliente> obterPorId(UUID id) {
-      return repository.findById(id);
+   public Cliente obterPorId(String id) {
+      UUID idCliente = UUID.fromString(id);
+      return repository.findById(idCliente)
+         .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
    }
 
    @Transactional
@@ -77,13 +78,9 @@ public class ClienteService {
    }
 
    @Transactional(readOnly = true)
-   public Optional<Cliente> pesquisaPorNome(String nome) {
-      return repository.findByNome(nome);
-   }
-
-   @Transactional(readOnly = true)
-   public Optional<Cliente> pesquisaPorId(UUID id) {
-      return repository.findById(id);
+   public Cliente pesquisaPorNome(String nome) {
+      return repository.findByNome(nome)
+         .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
    }
 
    @Transactional(readOnly = true)

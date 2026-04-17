@@ -1,10 +1,8 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.*;
+import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ClienteMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
-import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
-import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaFisica;
-import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +27,7 @@ import java.util.UUID;
 public class ClienteController {
 
    private final ClienteService service;
+   private final ClienteMapper mapper;
 
    @Operation(description = "Criar um cliente Pessoa Física")
    @ApiResponses(
@@ -107,45 +105,8 @@ public class ClienteController {
    )
    @GetMapping("{id}")
    public ResponseEntity<?> buscarPorId(@PathVariable("id") String id) {
-
-      UUID uuid = UUID.fromString(id);
-
-      Optional<Cliente> clienteEncontrado = service.obterPorId(uuid);
-
-      if (clienteEncontrado.isPresent()) {
-         Cliente clienteEntidade = clienteEncontrado.get();
-
-         if (clienteEntidade instanceof PessoaFisica pf) {
-            PessoaFisicaResponseDTO pessoaFisicaResponseDTO = new PessoaFisicaResponseDTO(
-               pf.getId(),
-               pf.getNome(),
-               pf.getEmail(),
-               pf.getTelefone(),
-               pf.getEndereco(),
-               pf.getTipoCliente(),
-               pf.getCpf()
-            );
-
-            return ResponseEntity.ok(pessoaFisicaResponseDTO);
-         }
-
-         if (clienteEntidade instanceof PessoaJuridica pj) {
-            PessoaJuridicaResponseDTO pessoaJuridicaResponseDTO = new PessoaJuridicaResponseDTO(
-               pj.getId(),
-               pj.getNome(),
-               pj.getEmail(),
-               pj.getTelefone(),
-               pj.getEndereco(),
-               pj.getTipoCliente(),
-               pj.getCnpj()
-            );
-
-            return ResponseEntity.ok(pessoaJuridicaResponseDTO);
-         }
-
-      }
-
-      return ResponseEntity.notFound().build();
+      Cliente cliente = service.obterPorId(UUID.fromString(id));
+      return ResponseEntity.ok(mapper.mapearParaResponse(cliente));
    }
 
    @Operation(description = "Atualizar um cliente existente no banco de dados, buscando-o via ID")

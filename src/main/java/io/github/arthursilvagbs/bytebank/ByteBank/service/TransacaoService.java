@@ -3,6 +3,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransacaoCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.transacao.TransferenciaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ContaNaoEncontradaException;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.RecursoNaoEncontradoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.SaldoInsuficienteException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ValorInvalidoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.TransacaoMapper;
@@ -16,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -93,8 +93,10 @@ public class TransacaoService {
    }
 
    @Transactional(readOnly = true)
-   public Optional<Transacao> buscarTransacaoPorId(UUID id) {
-      return repository.findById(id);
+   public Transacao buscarTransacaoPorId(String id) {
+      UUID idTransacao = UUID.fromString(id);
+      return repository.findById(idTransacao)
+         .orElseThrow(() -> new RecursoNaoEncontradoException("Transação não encontrada"));
    }
 
    @Transactional(readOnly = true)

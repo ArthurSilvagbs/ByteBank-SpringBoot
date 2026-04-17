@@ -1,10 +1,9 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaCreateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaResponseDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaUpdateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
-import io.github.arthursilvagbs.bytebank.ByteBank.service.ContaService; //mudado pelo claude
+import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ContaMapper;
+import io.github.arthursilvagbs.bytebank.ByteBank.service.ContaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -28,6 +26,7 @@ import java.util.UUID;
 public class ContaController {
 
    private final ContaService service;
+   private final ContaMapper mapper;
 
    @Operation(description = "Criar uma conta")
    @ApiResponses(
@@ -86,22 +85,7 @@ public class ContaController {
    )
    @GetMapping("{id}")
    public ResponseEntity<?> obterPorId(@PathVariable("id") String id) {
-      UUID idConta = UUID.fromString(id);
-      Optional<Conta> contaOptional = service.obterPorID(idConta);
-
-      if (contaOptional.isEmpty()) {
-         return ResponseEntity.notFound().build();
-      }
-
-      Conta conta = contaOptional.get();
-
-      ContaResponseDTO dto = new ContaResponseDTO(
-         conta.getId(),
-         conta.getNumeroConta(),
-         conta.getSaldo(),
-         conta.getCliente().getId());
-
-      return ResponseEntity.ok(dto);
+      return ResponseEntity.ok(mapper.mapearParaResponse(service.obterPorID(id)));
    }
 
    @Operation(description = "Atualizar saldo da conta")
