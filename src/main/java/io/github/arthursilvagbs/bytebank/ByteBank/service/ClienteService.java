@@ -10,7 +10,6 @@ import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ClienteMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ClienteRepository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +58,7 @@ public class ClienteService {
       repository.save(cliente);
    }
 
+   @Transactional(readOnly = true)
    public Optional<Cliente> obterPorId(UUID id) {
       return repository.findById(id);
    }
@@ -76,18 +76,22 @@ public class ClienteService {
       repository.delete(cliente);
    }
 
+   @Transactional(readOnly = true)
    public Optional<Cliente> pesquisaPorNome(String nome) {
       return repository.findByNome(nome);
    }
 
+   @Transactional(readOnly = true)
    public Optional<Cliente> pesquisaPorId(UUID id) {
       return repository.findById(id);
    }
 
+   @Transactional(readOnly = true)
    public List<Cliente> obterTodosOsClientes() {
       return repository.findAll();
    }
 
+   @Transactional(readOnly = true)
    public boolean possuiConta(Cliente cliente) {
       return contaRepository.existsByCliente(cliente);
    }

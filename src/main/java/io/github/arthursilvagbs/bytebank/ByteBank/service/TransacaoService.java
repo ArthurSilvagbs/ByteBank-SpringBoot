@@ -11,7 +11,6 @@ import io.github.arthursilvagbs.bytebank.ByteBank.model.Transacao;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.ContaRepository;
 import io.github.arthursilvagbs.bytebank.ByteBank.repository.TransacaoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,10 +92,12 @@ public class TransacaoService {
       return repository.save(transacao);
    }
 
+   @Transactional(readOnly = true)
    public Optional<Transacao> buscarTransacaoPorId(UUID id) {
       return repository.findById(id);
    }
 
+   @Transactional(readOnly = true)
    public List<Transacao> buscarMovimentacoesPorConta(Conta conta) {
       return repository.findAllByContaOrigem(conta);
    }

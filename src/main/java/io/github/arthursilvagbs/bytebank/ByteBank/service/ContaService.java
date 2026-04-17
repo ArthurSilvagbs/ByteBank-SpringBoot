@@ -46,12 +46,24 @@ public class ContaService {
       repository.save(conta);
    }
 
+   @Transactional(readOnly = true)
    public Optional<Conta> obterPorID(UUID id) {
       return repository.findById(id);
    }
 
+   @Transactional(readOnly = true)
    public Optional<Conta> obterPorNumConta(Integer numeroConta) {
       return repository.findByNumeroConta(numeroConta);
+   }
+
+   @Transactional(readOnly = true)
+   public List<Conta> obterTodasAsContas() {
+      return repository.findAll();
+   }
+
+   @Transactional(readOnly = true)
+   public List<Conta> obterContasPorCliente(Cliente cliente) {
+      return repository.findAllByCliente(cliente);
    }
 
    @Transactional
@@ -62,14 +74,6 @@ public class ContaService {
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
       repository.delete(conta);
-   }
-
-   public List<Conta> obterTodasAsContas() {
-      return repository.findAll();
-   }
-
-   public List<Conta> obterContasPorCliente(Cliente cliente) {
-      return repository.findAllByCliente(cliente);
    }
 
 }
