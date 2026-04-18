@@ -2,7 +2,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaUpdateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEcontradoException;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEncontradoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ContaNaoEncontradaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ContaMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
@@ -27,7 +27,7 @@ public class ContaService {
    @Transactional
    public Conta salvar(ContaCreateDTO dto){
       Cliente cliente = clienteRepository.findById(dto.clienteId())
-         .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
+         .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado"));
 
       Conta conta = mapper.mapearParaConta(cliente);
       return repository.save(conta);

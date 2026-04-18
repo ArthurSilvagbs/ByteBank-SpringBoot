@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,7 +45,7 @@ public class TransacaoController {
       }
    )
    @PostMapping("/saque")
-   public ResponseEntity<?> saque(@RequestBody TransacaoCreateDTO dto) {
+   public ResponseEntity<?> saque(@RequestBody @Valid TransacaoCreateDTO dto) {
 
       Transacao transacao = transacaoService.saque(dto);
 
@@ -72,7 +73,7 @@ public class TransacaoController {
       }
    )
    @PostMapping("/deposito")
-   public ResponseEntity<?> deposito(@RequestBody TransacaoCreateDTO dto) {
+   public ResponseEntity<?> deposito(@RequestBody @Valid TransacaoCreateDTO dto) {
 
       Transacao transacao = transacaoService.deposito(dto);
 
@@ -100,7 +101,7 @@ public class TransacaoController {
       }
    )
    @PostMapping("/transferencia")
-   public ResponseEntity<?> transferencia(@RequestBody TransferenciaCreateDTO dto) {
+   public ResponseEntity<?> transferencia(@RequestBody @Valid TransferenciaCreateDTO dto) {
 
       Transacao transacao = transacaoService.transferencia(dto);
 

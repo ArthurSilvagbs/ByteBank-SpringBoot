@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/clientes")
@@ -105,7 +104,7 @@ public class ClienteController {
    )
    @GetMapping("{id}")
    public ResponseEntity<?> buscarPorId(@PathVariable("id") String id) {
-      Cliente cliente = service.obterPorId(UUID.fromString(id));
+      Cliente cliente = service.obterPorId(id);
       return ResponseEntity.ok(mapper.mapearParaResponse(cliente));
    }
 
@@ -129,7 +128,7 @@ public class ClienteController {
       }
    )
    @PutMapping("{id}")
-   public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody ClienteUpdateDTO dto) {
+   public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid ClienteUpdateDTO dto) {
       service.atualizar(id, dto);
       return ResponseEntity.ok().build();
    }

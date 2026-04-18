@@ -1,6 +1,7 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 
 public record ClienteUpdateDTO(
 
@@ -8,6 +9,7 @@ public record ClienteUpdateDTO(
    String nome,
 
    @Schema(description = "Email do cliente", example = "joaosilva@email.com")
+   @Email(message = "Deve ser um email válido")
    String email,
 
    @Schema(description = "Telefone do cliente", example = "00912345678")

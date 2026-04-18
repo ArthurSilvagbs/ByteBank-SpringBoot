@@ -1,7 +1,5 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente;
 
-import io.github.arthursilvagbs.bytebank.ByteBank.model.PessoaJuridica;
-import io.github.arthursilvagbs.bytebank.ByteBank.model.TipoCliente;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -52,7 +52,7 @@ public class TransacaoService {
          throw new ValorInvalidoException("Valor negativo não permitido");
       }
 
-      if (contaOrigem.getSaldo().compareTo(dto.valor()) <= 0) {
+      if (contaOrigem.getSaldo().compareTo(dto.valor()) < 0) {
          throw new SaldoInsuficienteException("Saldo insuficiente");
       }
 
@@ -72,7 +72,7 @@ public class TransacaoService {
       Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
-      if (contaOrigem.getSaldo().compareTo(dto.valor()) <= 0) {
+      if (contaOrigem.getSaldo().compareTo(dto.valor()) < 0) {
          throw new SaldoInsuficienteException("Saldo insuficiente");
       }
 

@@ -266,6 +266,26 @@ class TransacaoServiceTest {
    }
 
    @Test
+   @DisplayName("Deve efetuar o saque com sucesso quando o valor for igual ao saldo")
+   void saqueValorIgualAoSaldo() {
+      UUID contaId = UUID.randomUUID();
+      Conta conta = new Conta();
+      conta.setSaldo(new BigDecimal("200.00"));
+      TransacaoCreateDTO dto = new TransacaoCreateDTO(new BigDecimal("200.00"), contaId);
+
+      Transacao transacaoMapeada = new Transacao();
+
+      when(contaRepository.findById(contaId)).thenReturn(Optional.of(conta));
+      when(mapper.mapearParaTransacao(any(), any())).thenReturn(transacaoMapeada);
+      when(repository.save(any())).thenReturn(transacaoMapeada);
+
+      Transacao resultado = service.saque(dto);
+
+      assertNotNull(resultado);
+      assertEquals(new BigDecimal("0.00"), conta.getSaldo());
+   }
+
+   @Test
    @DisplayName("Deve lançar uma exceptio pra saldo insuficiente")
    void transferenciaSaldoInsuficiente() {
       UUID contaOrigemId = UUID.randomUUID();

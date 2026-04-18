@@ -3,7 +3,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.ClienteUpdateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaFisicaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaJuridicaCreateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEcontradoException;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEncontradoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.OperacaoNaoPermitidaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.RegistroDuplicadoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ClienteMapper;
@@ -116,6 +116,19 @@ class ClienteServiceTest {
       verify(repository, never()).save(any());
    }
 
+   @Test
+   @DisplayName("Deve lançar RegistroDuplicadoException quando email já estiver cadastrado para pessoa jurídica")
+   void salvarPessoaJuridicaEmailDuplicado() {
+      PessoaJuridicaCreateDTO dto = new PessoaJuridicaCreateDTO("nome", "teste@email.com", "12345678", "endereço", "12345678900011");
+
+      when(repository.findByCpf(dto.cnpj())).thenReturn(Optional.empty());
+      when(repository.findByEmail(dto.email())).thenReturn(Optional.of(new PessoaJuridica()));
+
+      assertThrows(RegistroDuplicadoException.class, () -> service.salvarPessoaJuridica(dto));
+
+      verify(repository, never()).save(any());
+   }
+
    // ===================== atualizar =====================
 
    @Test
@@ -144,7 +157,7 @@ class ClienteServiceTest {
 
       when(repository.findById(id)).thenReturn(Optional.empty());
 
-      assertThrows(ClienteNaoEcontradoException.class, () -> service.atualizar(id.toString(), dto));
+      assertThrows(ClienteNaoEncontradoException.class, () -> service.atualizar(id.toString(), dto));
 
       verify(repository, never()).save(any());
    }
@@ -186,7 +199,7 @@ class ClienteServiceTest {
 
       when(repository.findById(id)).thenReturn(Optional.empty());
 
-      assertThrows(ClienteNaoEcontradoException.class, () -> service.deletar(id.toString()));
+      assertThrows(ClienteNaoEncontradoException.class, () -> service.deletar(id.toString()));
 
       verify(repository, never()).delete(any());
    }
@@ -214,7 +227,7 @@ class ClienteServiceTest {
 
       when(repository.findById(id)).thenReturn(Optional.empty());
 
-      assertThrows(ClienteNaoEcontradoException.class, () -> service.obterPorId(id.toString()));
+      assertThrows(ClienteNaoEncontradoException.class, () -> service.obterPorId(id.toString()));
    }
 
    // ===================== pesquisaPorNome =====================
@@ -237,7 +250,7 @@ class ClienteServiceTest {
    void pesquisaPorNomeNaoEncontrado() {
       when(repository.findByNome("Inexistente")).thenReturn(Optional.empty());
 
-      assertThrows(ClienteNaoEcontradoException.class, () -> service.pesquisaPorNome("Inexistente"));
+      assertThrows(ClienteNaoEncontradoException.class, () -> service.pesquisaPorNome("Inexistente"));
    }
 
    // ===================== obterTodosOsClientes =====================

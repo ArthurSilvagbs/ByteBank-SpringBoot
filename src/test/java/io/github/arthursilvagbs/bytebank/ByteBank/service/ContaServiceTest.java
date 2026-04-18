@@ -2,7 +2,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaUpdateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEcontradoException;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEncontradoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ContaNaoEncontradaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ContaMapper;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Cliente;
@@ -70,7 +70,7 @@ class ContaServiceTest {
 
       when(clienteRepository.findById(clienteId)).thenReturn(Optional.empty());
 
-      assertThrows(ClienteNaoEcontradoException.class, () -> service.salvar(dto));
+      assertThrows(ClienteNaoEncontradoException.class, () -> service.salvar(dto));
 
       verify(clienteRepository).findById(clienteId);
       verify(repository, never()).save(any());

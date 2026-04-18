@@ -1,8 +1,10 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaCreateDTO;
+import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaResponseDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.conta.ContaUpdateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ContaMapper;
+import io.github.arthursilvagbs.bytebank.ByteBank.model.Conta;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.ContaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +46,7 @@ public class ContaController {
       }
    )
    @PostMapping
-   public ResponseEntity<Object> salvar(@RequestBody ContaCreateDTO dto) {
+   public ResponseEntity<Object> salvar(@RequestBody @Valid ContaCreateDTO dto) {
 
       Conta conta = service.salvar(dto);
 
@@ -114,7 +117,7 @@ public class ContaController {
       }
    )
    @PutMapping("{id}")
-   public ResponseEntity<Object> atualizarSaldo(@PathVariable("id") String id, @RequestBody ContaUpdateDTO dto) {
+   public ResponseEntity<Object> atualizarSaldo(@PathVariable("id") String id, @RequestBody @Valid ContaUpdateDTO dto) {
       service.atualizar(id, dto);
       return ResponseEntity.ok().build();
    }

@@ -3,7 +3,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.service;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.ClienteUpdateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaFisicaCreateDTO;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.cliente.PessoaJuridicaCreateDTO;
-import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEcontradoException;
+import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.ClienteNaoEncontradoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.OperacaoNaoPermitidaException;
 import io.github.arthursilvagbs.bytebank.ByteBank.exceptions.RegistroDuplicadoException;
 import io.github.arthursilvagbs.bytebank.ByteBank.mappers.ClienteMapper;
@@ -48,12 +48,13 @@ public class ClienteService {
    @Transactional
    public void atualizar(String id, ClienteUpdateDTO dto) {
       UUID idCliente  = UUID.fromString(id);
-      Cliente cliente = repository.findById(idCliente).orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
+      Cliente cliente = repository.findById(idCliente).orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado"));
 
-      cliente.setNome(dto.nome());
-      cliente.setEmail(dto.email());
-      cliente.setTelefone(dto.telefone());
-      cliente.setEndereco(dto.endereco());
+      if (dto.nome() != null) cliente.setNome(dto.nome());
+      if (dto.email() != null) cliente.setEmail(dto.email());
+      if (dto.telefone() != null) cliente.setTelefone(dto.telefone());
+      if (dto.endereco() != null) cliente.setEndereco(dto.endereco());
+
       repository.save(cliente);
    }
 
@@ -61,7 +62,7 @@ public class ClienteService {
    public Cliente obterPorId(String id) {
       UUID idCliente = UUID.fromString(id);
       return repository.findById(idCliente)
-         .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
+         .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado"));
    }
 
    @Transactional
@@ -69,7 +70,7 @@ public class ClienteService {
       UUID idCliente = UUID.fromString(id);
 
       Cliente cliente = repository.findById(idCliente)
-         .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
+         .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado"));
 
       if (possuiConta(cliente)) {
          throw new OperacaoNaoPermitidaException("O cliente não pode ser deletado, pois ainda existem contas vinculadas a ele.");
@@ -80,7 +81,7 @@ public class ClienteService {
    @Transactional(readOnly = true)
    public Cliente pesquisaPorNome(String nome) {
       return repository.findByNome(nome)
-         .orElseThrow(() -> new ClienteNaoEcontradoException("Cliente não encontrado"));
+         .orElseThrow(() -> new ClienteNaoEncontradoException("Cliente não encontrado"));
    }
 
    @Transactional(readOnly = true)
