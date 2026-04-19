@@ -1,68 +1,114 @@
 # ByteBank - Spring Boot API
 
-> ⚠️ **Status do Projeto**: Este projeto está em fase de desenvolvimento e ainda não foi finalizado. Novas funcionalidades e melhorias estão sendo implementadas gradualmente.
+> ⚠️ **Status do Projeto**: Em desenvolvimento ativo. Funcionalidades principais implementadas; melhorias sendo adicionadas gradualmente.
 
-## Descrição do Projeto
+## Descrição
 
-O **ByteBank** é uma API RESTful robusta desenvolvida com **Spring Boot 3** para gerenciar operações bancárias essenciais. O sistema permite o gerenciamento de clientes (Pessoas Físicas e Jurídicas), contas bancárias e a realização de movimentações financeiras, garantindo a integridade dos dados através de validações rigorosas e tratamento de exceções personalizado.
+O **ByteBank** é uma API RESTful desenvolvida com **Spring Boot 4** para gerenciar operações bancárias essenciais. O sistema permite o cadastro de clientes (Pessoa Física e Jurídica), gerenciamento de contas bancárias e a realização de movimentações financeiras, com validações rigorosas, tratamento de exceções centralizado e documentação interativa via Swagger.
 
 ## Tecnologias Utilizadas
 
-*   **Java 21**: Versão mais recente do Java com suporte a recursos modernos.
-*   **Spring Boot 4.0.2**: Framework principal para criação da API.
-*   **Spring Data JPA**: Para persistência de dados e integração com o banco de dados.
-*   **PostgreSQL**: Banco de dados relacional utilizado para armazenamento persistente.
-*   **Lombok**: Biblioteca para reduzir o código boilerplate (getters, setters, construtores).
-*   **MapStruct**: Para mapeamento eficiente entre entidades e DTOs.
-*   **Spring Validation**: Para validação de dados de entrada nos endpoints.
-*   **Maven**: Gerenciador de dependências e automação de build.
+- **Java 21**
+- **Spring Boot 4.0.2**
+- **Spring Security**: Autenticação HTTP Basic configurada
+- **Spring Data JPA**: Persistência de dados
+- **PostgreSQL**: Banco de dados relacional
+- **springdoc-openapi 2.8.6**: Documentação interativa (Swagger UI)
+- **MapStruct**: Mapeamento entre entidades e DTOs
+- **Lombok**: Redução de boilerplate
+- **Spring Validation**: Validação de dados de entrada
+- **Maven**: Gerenciamento de dependências e build
 
-## Arquitetura e Organização
+## Arquitetura
 
-O projeto segue os padrões de arquitetura em camadas, promovendo a separação de responsabilidades:
+O projeto segue arquitetura em camadas:
 
-*   **Controller**: Endpoints da API que recebem as requisições HTTP.
-*   **Service**: Camada de lógica de negócios e regras do sistema.
-*   **Repository**: Interface de comunicação com o banco de dados via JPA.
-*   **Model/Entity**: Representação das tabelas do banco de dados.
-*   **DTO (Data Transfer Object)**: Objetos para transferência de dados entre as camadas, evitando a exposição direta das entidades.
-*   **Mapper**: Conversão entre Entidades e DTOs utilizando MapStruct.
-*   **Validator**: Lógica de validação customizada para garantir a consistência das operações.
+| Camada | Responsabilidade |
+|---|---|
+| **Controller** | Recebe requisições HTTP e delega para a camada de serviço |
+| **Service** | Lógica de negócio e regras do domínio |
+| **Repository** | Comunicação com o banco via JPA |
+| **Model/Entity** | Representação das tabelas do banco |
+| **DTO** | Transferência de dados entre camadas (sem expor entidades) |
+| **Mapper** | Conversão entre entidades e DTOs via MapStruct |
+| **GlobalExceptionHandler** | Tratamento centralizado de exceções com respostas padronizadas |
 
-## Funcionalidades (Em Desenvolvimento)
+## Endpoints
 
-*   **Gestão de Clientes**:
-    *   Suporte para Pessoa Física (CPF) e Pessoa Jurídica (CNPJ).
-    *   Cadastro, atualização e consulta de clientes.
-*   **Gestão de Contas**:
-    *   Criação de contas vinculadas a clientes.
-    *   Controle de saldo e validação de status da conta.
-*   **Movimentações Financeiras**:
-    *   Registro de depósitos, saques e transferências.
-    *   Validação de saldo insuficiente e operações não permitidas.
-*   **Tratamento de Erros**:
-    *   Handler global para capturar e formatar exceções como `SaldoInsuficienteException` e `RegistroDuplicadoException`.
+### Clientes (`/clientes`)
 
-## Como Executar (Ambiente de Desenvolvimento)
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/clientes/pf` | Cadastrar Pessoa Física |
+| `POST` | `/clientes/pj` | Cadastrar Pessoa Jurídica |
+| `GET` | `/clientes/{id}` | Buscar cliente por ID |
+| `PUT` | `/clientes/{id}` | Atualizar dados do cliente |
+| `DELETE` | `/clientes/{id}` | Remover cliente |
+
+### Contas (`/contas`)
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/contas` | Criar conta bancária |
+| `GET` | `/contas/{id}` | Buscar conta por ID |
+| `PUT` | `/contas/{id}` | Atualizar saldo da conta |
+| `DELETE` | `/contas/{id}` | Encerrar conta |
+
+### Transações (`/transacoes`)
+
+| Método | Rota | Descrição |
+|---|---|---|
+| `POST` | `/transacoes/deposito` | Efetuar depósito |
+| `POST` | `/transacoes/saque` | Efetuar saque |
+| `POST` | `/transacoes/transferencia` | Efetuar transferência entre contas |
+
+## Exceções Tratadas
+
+O `GlobalExceptionHandler` captura e formata os seguintes erros:
+
+| Exceção | HTTP |
+|---|---|
+| `RecursoNaoEncontradoException` | 404 Not Found |
+| `RegistroDuplicadoException` | 409 Conflict |
+| `SaldoInsuficienteException` | 422 Unprocessable Entity |
+| `OperacaoNaoPermitidaException` | 422 Unprocessable Entity |
+| `ValorInvalidoException` | 400 Bad Request |
+| `MethodArgumentNotValidException` | 400 Bad Request |
+
+## Documentação (Swagger UI)
+
+Com a aplicação em execução, acesse:
+
+```
+http://localhost:8080/swagger-ui/index.html
+```
+
+## Testes
+
+Testes unitários implementados para as camadas de serviço:
+
+- `ClienteServiceTest`
+- `ContaServiceTest`
+- `TransacaoServiceTest`
+
+## Como Executar
 
 ### Pré-requisitos
 
-*   JDK 21 instalado.
-*   Maven instalado.
-*   PostgreSQL configurado e em execução.
+- JDK 21
+- Maven
+- PostgreSQL em execução
 
 ### Passos
 
-1.  **Clone o repositório:**
+1. **Clone o repositório:**
 
     ```bash
     git clone https://github.com/ArthurSilvagbs/bytebank-springboot.git
     cd ByteBank-SpringBoot
     ```
 
-2.  **Configure o banco de dados:**
-
-    Edite o arquivo `src/main/resources/application.yml` com as credenciais do seu PostgreSQL:
+2. **Configure o banco de dados** em `src/main/resources/application.yml`:
 
     ```yaml
     spring:
@@ -72,7 +118,7 @@ O projeto segue os padrões de arquitetura em camadas, promovendo a separação 
         password: sua_senha
     ```
 
-3.  **Execute a aplicação:**
+3. **Execute a aplicação:**
 
     ```bash
     ./mvnw spring-boot:run
@@ -80,8 +126,6 @@ O projeto segue os padrões de arquitetura em camadas, promovendo a separação 
 
 ## Próximos Passos
 
-*   [ ] Implementação de testes unitários e de integração.
-*   [ ] Adição de documentação Swagger/OpenAPI.
-*   [ ] Implementação de autenticação e autorização com Spring Security.
-*   [ ] Finalização dos mappers para todos os tipos de clientes.
-
+- [ ] Implementação de JWT para substituir HTTP Basic
+- [ ] Testes de integração
+- [ ] Paginação nos endpoints de listagem
