@@ -29,7 +29,7 @@ public class TransacaoService {
 
    @Transactional
    public Transacao deposito(TransacaoCreateDTO dto) {
-      Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
+      Conta contaOrigem = contaRepository.findById(dto.idContaOrigem())
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
       if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
@@ -45,7 +45,7 @@ public class TransacaoService {
 
    @Transactional
    public Transacao saque(TransacaoCreateDTO dto) {
-      Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
+      Conta contaOrigem = contaRepository.findById(dto.idContaOrigem())
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
       if (dto.valor().compareTo(BigDecimal.ZERO) <= 0) {
@@ -69,14 +69,14 @@ public class TransacaoService {
          throw new ValorInvalidoException("Valor negativo não é permitido");
       }
 
-      Conta contaOrigem = contaRepository.findById(dto.IdContaOrigem())
+      Conta contaOrigem = contaRepository.findById(dto.idContaOrigem())
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
       if (contaOrigem.getSaldo().compareTo(dto.valor()) < 0) {
          throw new SaldoInsuficienteException("Saldo insuficiente");
       }
 
-      Conta contaDestino = contaRepository.findById(dto.IdContaDestino())
+      Conta contaDestino = contaRepository.findById(dto.idContaDestino())
          .orElseThrow(() -> new ContaNaoEncontradaException("Conta não encontrada"));
 
       BigDecimal saldoContaOrigem = contaOrigem.getSaldo().subtract(dto.valor());

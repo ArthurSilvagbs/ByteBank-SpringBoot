@@ -2,6 +2,7 @@ package io.github.arthursilvagbs.bytebank.ByteBank.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +23,7 @@ public class Transacao {
 
    @Id
    @Column(name = "id", nullable = false)
+   @GeneratedValue(strategy = GenerationType.UUID)
    private UUID id;
 
    @Min(0)

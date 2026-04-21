@@ -22,13 +22,13 @@ public record TransferenciaCreateDTO(
       example = "123e4567-e89b-12d3-a456-426614174000"
    )
    @NotNull(message = "O campo é obrigatório")
-   UUID IdContaOrigem,
+   UUID idContaOrigem,
 
    @Schema(
       description = "Id da conta destino da transferência",
       example = "123e4567-e89b-12d3-a456-426614174000"
    )
    @NotNull(message = "O campo é obrigatório")
-   UUID IdContaDestino)
+   UUID idContaDestino)
 {
 }
