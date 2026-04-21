@@ -1,7 +1,9 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.model;
 
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.List;
@@ -25,13 +27,14 @@ public class Usuario {
    @Column(name = "senha", nullable = false, length = 255)
    private String senha;
 
-   @Column(name = "roles")
+   @Type(ListArrayType.class)
+   @Column(name = "roles", columnDefinition = "varchar[]")
    private List<String> roles;
 
-   public Usuario(UUID id, String login, String senha, List<String> roles) {
-      this.id = id;
+   public Usuario(String login, String senha, List<String> roles) {
       this.login = login;
       this.senha = senha;
       this.roles = roles;
    }
+
 }

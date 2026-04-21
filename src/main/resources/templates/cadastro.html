@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteBank — Criar conta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --accent: #e8553d;
+          --accent-hover: #d4432c;
+          --dark: #0f1117;
+          --card-bg: rgba(255, 255, 255, 0.04);
+          --card-border: rgba(255, 255, 255, 0.08);
+          --text-primary: #f0ece6;
+          --text-muted: #b5b0bc;
+          --input-bg: rgba(255, 255, 255, 0.06);
+          --input-border: rgba(255, 255, 255, 0.1);
+          --input-focus: rgba(232, 85, 61, 0.4);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+          font-family: 'Nunito', sans-serif;
+          background: var(--dark);
+          min-height: 100vh;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          padding: 2.5rem 1rem;
+          color: var(--text-primary);
+        }
+
+        .bg-glow {
+          position: fixed;
+          inset: 0;
+          z-index: 0;
+          overflow: hidden;
+        }
+        .bg-glow::before,
+        .bg-glow::after {
+          content: '';
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(120px);
+          opacity: .35;
+          animation: float 12s ease-in-out infinite alternate;
+        }
+        .bg-glow::before {
+          width: 500px; height: 500px;
+          background: var(--accent);
+          top: -15%; left: -10%;
+        }
+        .bg-glow::after {
+          width: 400px; height: 400px;
+          background: #6c3ce0;
+          bottom: -10%; right: -5%;
+          animation-delay: -6s;
+        }
+        @keyframes float {
+          0%   { transform: translate(0, 0) scale(1); }
+          100% { transform: translate(60px, 40px) scale(1.15); }
+        }
+
+        .bg-noise {
+          position: fixed;
+          inset: 0;
+          z-index: 1;
+          opacity: .045;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+          pointer-events: none;
+        }
+
+        .cadastro-card {
+          position: relative;
+          z-index: 2;
+          width: 100%;
+          max-width: 460px;
+          background: var(--card-bg);
+          border: 1px solid var(--card-border);
+          border-radius: 24px;
+          padding: 3rem 2.5rem 2.5rem;
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          box-shadow:
+            0 0 0 1px rgba(255,255,255,.03) inset,
+            0 40px 80px -20px rgba(0,0,0,.5);
+          animation: cardIn .8s cubic-bezier(.16,1,.3,1) both;
+        }
+        @keyframes cardIn {
+          from { opacity: 0; transform: translateY(30px) scale(.97); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .brand-icon {
+          width: 52px;
+          height: 52px;
+          background: linear-gradient(135deg, var(--accent), #f0875a);
+          border-radius: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          color: #fff;
+          margin-bottom: 1.75rem;
+          box-shadow: 0 8px 24px -6px rgba(232, 85, 61, .4);
+          animation: iconPop .6s .3s cubic-bezier(.16,1,.3,1) both;
+        }
+        @keyframes iconPop {
+          from { opacity: 0; transform: scale(.6) rotate(-10deg); }
+          to   { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        .cadastro-card h1 {
+          font-family: 'Quicksand', sans-serif;
+          font-weight: 700;
+          font-size: 1.85rem;
+          margin-bottom: .35rem;
+          letter-spacing: -.02em;
+        }
+        .cadastro-card .subtitle {
+          color: var(--text-muted);
+          font-size: .925rem;
+          margin-bottom: 2rem;
+        }
+
+        .form-label {
+          font-size: .8rem;
+          font-weight: 500;
+          letter-spacing: .06em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-bottom: .45rem;
+        }
+
+        .input-wrap {
+          position: relative;
+          margin-bottom: 1.25rem;
+        }
+        .form-control {
+          background: var(--input-bg);
+          border: 1px solid var(--input-border);
+          border-radius: 14px;
+          color: var(--text-primary);
+          padding: .85rem 3rem .85rem 1.15rem;
+          font-size: .95rem;
+          transition: all .25s ease;
+        }
+        .form-control.no-icon {
+          padding-right: 1.15rem;
+        }
+        .form-control::placeholder {
+          color: var(--text-muted);
+          opacity: .75;
+        }
+        .form-control:focus {
+          background: rgba(255,255,255,.08);
+          border-color: var(--accent);
+          box-shadow: 0 0 0 4px var(--input-focus);
+          color: #fff;
+        }
+        .form-control.is-invalid {
+          border-color: #e8553d;
+          box-shadow: 0 0 0 4px rgba(232, 85, 61, .25);
+        }
+
+        .toggle-pw {
+          position: absolute;
+          right: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          cursor: pointer;
+          font-size: 1.1rem;
+          padding: 0;
+          transition: color .2s;
+        }
+        .toggle-pw:hover { color: var(--text-primary); }
+
+        /* PF/PJ toggle */
+        .type-toggle {
+          display: flex;
+          gap: .5rem;
+          margin-bottom: 1.75rem;
+          background: var(--input-bg);
+          border: 1px solid var(--input-border);
+          border-radius: 14px;
+          padding: 4px;
+        }
+        .type-btn {
+          flex: 1;
+          padding: .6rem;
+          border: none;
+          border-radius: 10px;
+          font-size: .9rem;
+          font-weight: 600;
+          font-family: 'Nunito', sans-serif;
+          cursor: pointer;
+          transition: all .25s;
+          background: transparent;
+          color: var(--text-muted);
+        }
+        .type-btn.active {
+          background: linear-gradient(135deg, var(--accent), #d94e38);
+          color: #fff;
+          box-shadow: 0 4px 14px -4px rgba(232, 85, 61, .5);
+        }
+
+        /* Error alert */
+        .alert-err {
+          background: rgba(232, 85, 61, .12);
+          border: 1px solid rgba(232, 85, 61, .3);
+          border-radius: 12px;
+          padding: .75rem 1rem;
+          font-size: .875rem;
+          color: #f0875a;
+          margin-bottom: 1.25rem;
+          display: flex;
+          align-items: center;
+          gap: .5rem;
+        }
+
+        /* Senha mismatch inline */
+        .field-error {
+          font-size: .8rem;
+          color: #f0875a;
+          margin-top: -.9rem;
+          margin-bottom: 1rem;
+          padding-left: .25rem;
+          display: none;
+        }
+        .field-error.visible { display: block; }
+
+        /* Button */
+        .btn-primary-action {
+          width: 100%;
+          padding: .9rem;
+          border: none;
+          border-radius: 14px;
+          font-size: 1rem;
+          font-weight: 600;
+          letter-spacing: .02em;
+          color: #fff;
+          background: linear-gradient(135deg, var(--accent), #d94e38);
+          position: relative;
+          overflow: hidden;
+          transition: transform .2s, box-shadow .3s;
+          cursor: pointer;
+          margin-top: .5rem;
+        }
+        .btn-primary-action::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+          opacity: 0;
+          transition: opacity .3s;
+        }
+        .btn-primary-action:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 32px -8px rgba(232, 85, 61, .5);
+        }
+        .btn-primary-action:hover::before { opacity: 1; }
+        .btn-primary-action:active { transform: translateY(0); }
+
+        .card-footer-text {
+          text-align: center;
+          margin-top: 1.75rem;
+          font-size: .9rem;
+          color: var(--text-muted);
+        }
+        .card-footer-text a {
+          color: var(--accent);
+          text-decoration: none;
+          font-weight: 600;
+          transition: color .2s;
+        }
+        .card-footer-text a:hover { color: #f0875a; }
+
+        .stagger { animation: fadeUp .6s cubic-bezier(.16,1,.3,1) both; }
+        .stagger:nth-child(1) { animation-delay: .35s; }
+        .stagger:nth-child(2) { animation-delay: .42s; }
+        .stagger:nth-child(3) { animation-delay: .49s; }
+        .stagger:nth-child(4) { animation-delay: .56s; }
+        .stagger:nth-child(5) { animation-delay: .63s; }
+        .stagger:nth-child(6) { animation-delay: .70s; }
+        .stagger:nth-child(7) { animation-delay: .77s; }
+        .stagger:nth-child(8) { animation-delay: .84s; }
+        .stagger:nth-child(9) { animation-delay: .91s; }
+        .stagger:nth-child(10) { animation-delay: .98s; }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+          .cadastro-card { padding: 2rem 1.5rem 1.75rem; border-radius: 20px; }
+          .cadastro-card h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-noise"></div>
+
+<div class="cadastro-card">
+    <div class="brand-icon stagger">
+        <svg width="26" height="26" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 6l7-3 7 3"/>
+            <path d="M4 10v11"/><path d="M20 10v11"/><path d="M8 14v4"/><path d="M12 14v4"/><path d="M16 14v4"/>
+        </svg>
+    </div>
+    <h1 class="stagger">Criar conta</h1>
+    <p class="subtitle stagger">Preencha os dados para abrir sua conta no ByteBank</p>
+
+    <form id="cadastroForm" autocomplete="off" method="post" th:action="@{/cadastro}">
+
+        <!-- PF / PJ toggle -->
+        <div class="type-toggle stagger">
+            <button type="button" id="btnPF" class="type-btn active" onclick="selecionarTipo('PF')">Pessoa Física</button>
+            <button type="button" id="btnPJ" class="type-btn" onclick="selecionarTipo('PJ')">Pessoa Jurídica</button>
+        </div>
+        <input type="hidden" id="tipoPessoa" name="tipoPessoa" value="PF">
+
+        <!-- Seção PF -->
+        <div id="secPF">
+            <div class="stagger">
+                <label class="form-label" for="nomePF">Nome completo</label>
+                <div class="input-wrap">
+                    <input type="text" class="form-control no-icon" id="nomePF" name="nome" placeholder="Seu nome completo">
+                </div>
+            </div>
+            <div class="stagger">
+                <label class="form-label" for="cpf">CPF</label>
+                <div class="input-wrap">
+                    <input type="text" class="form-control no-icon" id="cpf" name="documento" placeholder="000.000.000-00" maxlength="14" oninput="mascararCPF(this)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção PJ (oculta por padrão) -->
+        <div id="secPJ" style="display:none">
+            <div class="stagger">
+                <label class="form-label" for="razaoSocial">Razão Social</label>
+                <div class="input-wrap">
+                    <input type="text" class="form-control no-icon" id="razaoSocial" name="nome" placeholder="Nome da empresa" disabled>
+                </div>
+            </div>
+            <div class="stagger">
+                <label class="form-label" for="cnpj">CNPJ</label>
+                <div class="input-wrap">
+                    <input type="text" class="form-control no-icon" id="cnpj" name="documento" placeholder="00.000.000/0000-00" maxlength="18" disabled oninput="mascararCNPJ(this)">
+                </div>
+            </div>
+        </div>
+
+        <!-- E-mail -->
+        <div class="stagger">
+            <label class="form-label" for="email">E-mail</label>
+            <div class="input-wrap">
+                <input type="email" class="form-control no-icon" id="email" name="email" placeholder="seu@email.com">
+            </div>
+        </div>
+
+        <!-- Senha -->
+        <div class="stagger">
+            <label class="form-label" for="senha">Senha</label>
+            <div class="input-wrap">
+                <input type="password" class="form-control" id="senha" name="senha" placeholder="••••••••" oninput="validarSenhas()">
+                <button type="button" class="toggle-pw" onclick="toggleSenha('senha','eye1Open','eye1Closed')" aria-label="Mostrar senha">
+                    <svg id="eye1Open" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg id="eye1Closed" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confirmar Senha -->
+        <div class="stagger">
+            <label class="form-label" for="confirmaSenha">Confirmar senha</label>
+            <div class="input-wrap">
+                <input type="password" class="form-control" id="confirmaSenha" name="confirmaSenha" placeholder="••••••••" oninput="validarSenhas()">
+                <button type="button" class="toggle-pw" onclick="toggleSenha('confirmaSenha','eye2Open','eye2Closed')" aria-label="Mostrar senha">
+                    <svg id="eye2Open" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <svg id="eye2Closed" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                </button>
+            </div>
+            <div id="errSenha" class="field-error">As senhas não coincidem.</div>
+        </div>
+
+        <!-- Submit -->
+        <div class="stagger">
+            <button type="submit" class="btn-primary-action" id="btnSubmit">
+                Criar conta
+            </button>
+        </div>
+    </form>
+
+    <p class="card-footer-text stagger">
+        Já tem conta? <a th:href="@{/login}" href="/login">Entrar</a>
+    </p>
+</div>
+
+<script>
+    function selecionarTipo(tipo) {
+        document.getElementById('tipoPessoa').value = tipo;
+
+        const secPF = document.getElementById('secPF');
+        const secPJ = document.getElementById('secPJ');
+        const btnPF = document.getElementById('btnPF');
+        const btnPJ = document.getElementById('btnPJ');
+
+        if (tipo === 'PF') {
+            secPF.style.display = '';
+            secPJ.style.display = 'none';
+            secPF.querySelectorAll('input').forEach(i => i.disabled = false);
+            secPJ.querySelectorAll('input').forEach(i => i.disabled = true);
+            btnPF.classList.add('active');
+            btnPJ.classList.remove('active');
+        } else {
+            secPF.style.display = 'none';
+            secPJ.style.display = '';
+            secPF.querySelectorAll('input').forEach(i => i.disabled = true);
+            secPJ.querySelectorAll('input').forEach(i => i.disabled = false);
+            btnPJ.classList.add('active');
+            btnPF.classList.remove('active');
+        }
+    }
+
+    function toggleSenha(inputId, openId, closedId) {
+        const input = document.getElementById(inputId);
+        const open = document.getElementById(openId);
+        const closed = document.getElementById(closedId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            open.style.display = 'none';
+            closed.style.display = 'block';
+        } else {
+            input.type = 'password';
+            open.style.display = 'block';
+            closed.style.display = 'none';
+        }
+    }
+
+    function validarSenhas() {
+        const senha = document.getElementById('senha').value;
+        const confirma = document.getElementById('confirmaSenha').value;
+        const errEl = document.getElementById('errSenha');
+        const confirmInput = document.getElementById('confirmaSenha');
+
+        if (confirma.length === 0) {
+            errEl.classList.remove('visible');
+            confirmInput.classList.remove('is-invalid');
+            return;
+        }
+
+        if (senha !== confirma) {
+            errEl.classList.add('visible');
+            confirmInput.classList.add('is-invalid');
+        } else {
+            errEl.classList.remove('visible');
+            confirmInput.classList.remove('is-invalid');
+        }
+    }
+
+    document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+        const senha = document.getElementById('senha').value;
+        const confirma = document.getElementById('confirmaSenha').value;
+        if (senha !== confirma) {
+            e.preventDefault();
+            document.getElementById('errSenha').classList.add('visible');
+            document.getElementById('confirmaSenha').classList.add('is-invalid');
+        }
+    });
+
+    function mascararCPF(input) {
+        let v = input.value.replace(/\D/g, '').slice(0, 11);
+        if (v.length > 9) v = v.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+        else if (v.length > 6) v = v.replace(/^(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+        else if (v.length > 3) v = v.replace(/^(\d{3})(\d{0,3})/, '$1.$2');
+        input.value = v;
+    }
+
+    function mascararCNPJ(input) {
+        let v = input.value.replace(/\D/g, '').slice(0, 14);
+        if (v.length > 12) v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
+        else if (v.length > 8) v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,4})/, '$1.$2.$3/$4');
+        else if (v.length > 5) v = v.replace(/^(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
+        else if (v.length > 2) v = v.replace(/^(\d{2})(\d{0,3})/, '$1.$2');
+        input.value = v;
+    }
+</script>
+</body>
+</html>
