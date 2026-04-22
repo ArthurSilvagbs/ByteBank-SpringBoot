@@ -28,6 +28,7 @@ public class SecurityConfiguration {
          .authorizeHttpRequests(authorize ->
          {
             authorize.requestMatchers("/login/**").permitAll();
+            authorize.requestMatchers("/cadastro", "/bem-vindo").permitAll();
             authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
             authorize.requestMatchers("/clientes/**").hasRole("ADMIN");
             authorize.requestMatchers("/contas/**").hasRole("ADMIN");
