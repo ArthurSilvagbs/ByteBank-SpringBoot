@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -46,6 +47,7 @@ public class ContaController {
       }
    )
    @PostMapping
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO')")
    public ResponseEntity<Object> salvar(@RequestBody @Valid ContaCreateDTO dto) {
 
       Conta conta = service.salvar(dto);
@@ -86,6 +88,7 @@ public class ContaController {
          )
       }
    )
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO', 'USER')")
    @GetMapping("{id}")
    public ResponseEntity<?> obterPorId(@PathVariable("id") String id) {
       return ResponseEntity.ok(mapper.mapearParaResponse(service.obterPorID(id)));
@@ -117,6 +120,7 @@ public class ContaController {
       }
    )
    @PutMapping("{id}")
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO')")
    public ResponseEntity<Object> atualizarSaldo(@PathVariable("id") String id, @RequestBody @Valid ContaUpdateDTO dto) {
       service.atualizar(id, dto);
       return ResponseEntity.ok().build();
@@ -141,6 +145,7 @@ public class ContaController {
       }
    )
    @DeleteMapping("{id}")
+   @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
       service.deletar(id);
       return ResponseEntity.noContent().build();

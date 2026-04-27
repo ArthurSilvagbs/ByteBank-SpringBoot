@@ -2,8 +2,10 @@ package io.github.arthursilvagbs.bytebank.ByteBank.controller;
 
 import ch.qos.logback.classic.pattern.ClassOfCallerConverter;
 import io.github.arthursilvagbs.bytebank.ByteBank.DTO.usuario.UsuarioCreateDto;
+import io.github.arthursilvagbs.bytebank.ByteBank.model.Roles;
 import io.github.arthursilvagbs.bytebank.ByteBank.model.Usuario;
 import io.github.arthursilvagbs.bytebank.ByteBank.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("usuarios")
@@ -22,7 +25,7 @@ public class UsuarioController {
    private final UsuarioService service;
 
    @PostMapping
-   public ResponseEntity<?> salvarUsuario(@RequestBody UsuarioCreateDto dto) {
+   public ResponseEntity<?> salvarUsuario(@RequestBody @Valid UsuarioCreateDto dto) {
       Usuario usuario = service.salvar(dto);
 
       URI location = ServletUriComponentsBuilder

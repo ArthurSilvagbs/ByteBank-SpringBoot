@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,7 @@ public class TransacaoController {
       }
    )
    @PostMapping("/saque")
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO', 'USER')")
    public ResponseEntity<?> saque(@RequestBody @Valid TransacaoCreateDTO dto) {
 
       Transacao transacao = transacaoService.saque(dto);
@@ -73,6 +75,7 @@ public class TransacaoController {
       }
    )
    @PostMapping("/deposito")
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO', 'USER')")
    public ResponseEntity<?> deposito(@RequestBody @Valid TransacaoCreateDTO dto) {
 
       Transacao transacao = transacaoService.deposito(dto);
@@ -101,6 +104,7 @@ public class TransacaoController {
       }
    )
    @PostMapping("/transferencia")
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO', 'USER')")
    public ResponseEntity<?> transferencia(@RequestBody @Valid TransferenciaCreateDTO dto) {
 
       Transacao transacao = transacaoService.transferencia(dto);

@@ -24,7 +24,7 @@ public class Usuario {
    @Column(name = "login", nullable = false, length = 70)
    private String login;
 
-   @Column(name = "senha", nullable = false, length = 255)
+   @Column(name = "senha", nullable = false, length = 100)
    private String senha;
 
    @Type(ListArrayType.class)

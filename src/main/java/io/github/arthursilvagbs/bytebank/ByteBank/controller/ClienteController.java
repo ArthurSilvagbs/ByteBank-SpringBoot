@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -43,8 +44,8 @@ public class ClienteController {
       }
    )
    @PostMapping("/pf")
-   @PreAuthorize("hasAnyHole('ADMIN')")
-   public ResponseEntity<Object> salvarPessoaFisica(@RequestBody @Valid PessoaFisicaCreateDTO dto) {
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO')")
+   public ResponseEntity<Object> salvarPessoaFisica(@RequestBody @Valid PessoaFisicaCreateDTO dto, Authentication authentication) {
 
       Cliente cliente = service.salvarPessoaFisica(dto);
 
@@ -69,7 +70,7 @@ public class ClienteController {
       }
    )
    @PostMapping("/pj")
-   @PreAuthorize("hasAnyHole('ADMIN')")
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO')")
    public ResponseEntity<Object> salvarPessoaJuridica(@RequestBody @Valid PessoaJuridicaCreateDTO dto) {
 
       Cliente cliente = service.salvarPessoaJuridica(dto);
@@ -106,7 +107,7 @@ public class ClienteController {
       }
    )
    @GetMapping("{id}")
-   @PreAuthorize("hasAnyHole('ADMIN')")
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO')")
    public ResponseEntity<?> buscarPorId(@PathVariable("id") String id) {
       Cliente cliente = service.obterPorId(id);
       return ResponseEntity.ok(mapper.mapearParaResponse(cliente));
@@ -132,7 +133,7 @@ public class ClienteController {
       }
    )
    @PutMapping("{id}")
-   @PreAuthorize("hasAnyHole('ADMIN')")
+   @PreAuthorize("hasAnyRole('ADMIN', 'GERENTE', 'FUNCIONARIO')")
    public ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid ClienteUpdateDTO dto) {
       service.atualizar(id, dto);
       return ResponseEntity.ok().build();
@@ -151,7 +152,7 @@ public class ClienteController {
       }
    )
    @DeleteMapping("{id}")
-   @PreAuthorize("hasAnyHole('ADMIN')")
+   @PreAuthorize("hasRole('ADMIN')")
    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
       service.deletar(id);
       return ResponseEntity.noContent().build();

@@ -1,6 +1,7 @@
 package io.github.arthursilvagbs.bytebank.ByteBank.DTO.common;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ErrorDTO(
         int status,
